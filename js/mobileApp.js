@@ -1,10 +1,31 @@
 // HONDA MOTORCYCLE & SCOOTER INDIA (HMSI) - WMS MOBILE HANDHELD SCANNER APP
 // Zebra TC57 / TC26 / Android Industrial Warehouse Terminal Execution Engine
 
-window.wms = typeof loadWMSState === 'function' ? loadWMSState() : (window.wms || {});
+
+function ensureWMSState() {
+  if (!window.wms || typeof window.wms !== 'object') {
+    window.wms = typeof loadWMSState === 'function' ? loadWMSState() : {};
+  }
+  if (!window.wms.gateEntries) window.wms.gateEntries = [];
+  if (!window.wms.handlingUnits) window.wms.handlingUnits = [];
+  if (!window.wms.putawayTasks) window.wms.putawayTasks = [];
+  if (!window.wms.pickLists) window.wms.pickLists = [];
+  if (!window.wms.materialRequisitions) window.wms.materialRequisitions = [];
+  if (!window.wms.lineSupplyRequests) window.wms.lineSupplyRequests = [];
+  if (!window.wms.goodsReceiptNotes) window.wms.goodsReceiptNotes = [];
+  if (!window.wms.discrepancies) window.wms.discrepancies = [];
+  if (!window.wms.purchaseOrders) window.wms.purchaseOrders = [];
+  if (!window.wms.materials) window.wms.materials = [];
+  if (!window.wms.sapSyncLogs) window.wms.sapSyncLogs = [];
+  if (!window.wms.stockTransfers) window.wms.stockTransfers = [];
+  return window.wms;
+}
+
+window.wms = ensureWMSState();
 
 class MobileWMSApp {
   constructor() {
+    ensureWMSState();
     this.currentView = 'login';
     this.taskCategory = 'inbound';
     this.scannedHU = null;
