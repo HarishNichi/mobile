@@ -1,7 +1,7 @@
 // HONDA MOTORCYCLE & SCOOTER INDIA (HMSI) - WMS MOBILE HANDHELD SCANNER APP
 // Zebra TC57 / TC26 / Android Industrial Warehouse Terminal Execution Engine
 
-window.wms = loadWMSState();
+window.wms = typeof loadWMSState === 'function' ? loadWMSState() : (window.wms || {});
 
 class MobileWMSApp {
   constructor() {
