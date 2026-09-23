@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Honda HMSI - Mobile WMS Handheld Terminal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../web/css/wmsStyle.css">
+  <link rel="stylesheet" href="css/mobile.css">
+</head>
+<body>
+
+<!-- Smartphone / Rugged Handheld Frame -->
+<div class="mobile-device-wrapper">
+  <!-- Status Bar & Top Notch -->
+  <div class="mobile-status-bar">
+    <span>09:41</span>
+    <div class="mobile-notch"></div>
+    <span>📶 HMSI-WiFi • 98% ⚡</span>
+  </div>
+
+  <!-- Mobile App Header -->
+  <header class="mobile-app-header" id="mob-main-header">
+    <div class="mob-header-title">
+      <span style="font-size:16px;" id="mob-header-icon">🛵</span>
+      <h3>HONDA <span id="mob-header-role-title">TERMINAL</span></h3>
+    </div>
+    <div class="mob-header-actions" style="display:flex; gap:6px; align-items:center;">
+      <span class="mob-plant-tag" id="mob-header-user-tag" style="display:none;">Op 01</span>
+      <button class="mob-view-toggle-btn" id="mob-header-logout-btn" style="display:none; background:#dc2626; color:#fff; border-color:#dc2626;" title="Logout" onclick="mob.logout()">🚪 Logout</button>
+      <button class="mob-view-toggle-btn" title="Toggle full width" onclick="document.querySelector('.mobile-device-wrapper').classList.toggle('full-width-mode')">⛶</button>
+    </div>
+  </header>
+
+  <!-- Mobile Scrollable Body Area -->
+  <main class="mobile-body">
+    
+    <!-- 0. LOGIN & ROLE SELECTION SCREEN -->
+    <section id="mob-view-login" class="mobile-view active" style="padding:10px 0;">
+      <div style="text-align:center; padding:16px 0 20px 0;">
+        <div style="font-size:36px; margin-bottom:4px;">🛵</div>
+        <h2 style="font-size:18px; font-weight:900; color:#fff; margin:0; letter-spacing:1px;">HONDA MOTORCYCLE & SCOOTER</h2>
+        <div style="font-size:11px; color:#f87171; font-weight:700; text-transform:uppercase; margin-top:2px;">HMSI Narsapur Industrial WMS Terminal</div>
+      </div>
+
+      <div style="background:#1e293b; border-radius:14px; padding:18px; border:1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);">
+        <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:12px; letter-spacing:0.5px;">Select Your Shift Operator Role:</div>
+        
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          
+          <!-- Role 1: Security -->
+          <div class="mob-role-card" onclick="mob.login('SECURITY_OFFICER')" style="background:#0f172a; border:1px solid #10b981; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <div style="font-size:26px; background:#064e3b; padding:8px; border-radius:8px;">👮</div>
+            <div style="flex:1;">
+              <div style="color:#fff; font-weight:800; font-size:13px;">Security Gate Officer</div>
+              <div style="font-size:10px; color:#6ee7b7;">Truck Inward, Gate Pass, Vehicle Verification</div>
+            </div>
+            <span style="color:#10b981; font-weight:900;">➔</span>
+          </div>
+
+          <!-- Role 2: Warehouse Op -->
+          <div class="mob-role-card" onclick="mob.login('WAREHOUSE_OP')" style="background:#0f172a; border:1px solid #2563eb; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <div style="font-size:26px; background:#1e3a8a; padding:8px; border-radius:8px;">👷</div>
+            <div style="flex:1;">
+              <div style="color:#fff; font-weight:800; font-size:13px;">Warehouse Operator</div>
+              <div style="font-size:10px; color:#93c5fd;">Dock Inbound, HU Label Printing, FIFO Picking</div>
+            </div>
+            <span style="color:#38bdf8; font-weight:900;">➔</span>
+          </div>
+
+          <!-- Role 3: Line Supervisor -->
+          <div class="mob-role-card" onclick="mob.login('LINE_SUPERVISOR')" style="background:#0f172a; border:1px solid #a855f7; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <div style="font-size:26px; background:#581c87; padding:8px; border-radius:8px;">🏭</div>
+            <div style="flex:1;">
+              <div style="color:#fff; font-weight:800; font-size:13px;">Assembly Line Supervisor</div>
+              <div style="font-size:10px; color:#d8b4fe;">Line Material Requisitions (Kanban MR Request)</div>
+            </div>
+            <span style="color:#c084fc; font-weight:900;">➔</span>
+          </div>
+
+          <!-- Role 4: Forklift Driver -->
+          <div class="mob-role-card" onclick="mob.login('FORKLIFT_DRIVER')" style="background:#0f172a; border:1px solid #f59e0b; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
+            <div style="font-size:26px; background:#78350f; padding:8px; border-radius:8px;">🚜</div>
+            <div style="flex:1;">
+              <div style="color:#fff; font-weight:800; font-size:13px;">Forklift / Reach Truck Driver</div>
+              <div style="font-size:10px; color:#fde68a;">High-Rack Bin Putaway & Storage Strategy</div>
+            </div>
+            <span style="color:#fbbf24; font-weight:900;">➔</span>
+          </div>
+
+        </div>
+      </div>
+      
+      <div style="text-align:center; margin-top:14px; font-size:10px; color:#64748b;">
+        Zebra TC57 Handheld Engine • HMSI Narsapur AP Floor 04
+      </div>
+    </section>
+
+    <!-- 1. HOME VIEW -->
+    <section id="mob-view-home" class="mobile-view">
+      <div class="mob-greeting-box">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+          <div>
+            <div style="font-size:11px; color:#f87171; text-transform:uppercase; font-weight:700;" id="mob-role-badge">Good Morning, Warehouse Operator</div>
+            <div class="user-name" id="mob-user-name">Sanjay Verma (Op 01)</div>
+            <div class="warehouse-meta" id="mob-user-meta">HMSI Plant 1 • Raw Material Warehouse RM-WH-01</div>
+          </div>
+          <span style="font-size:24px;" id="mob-role-icon">👷</span>
+        </div>
+      </div>
+
+      <div class="mob-tasks-grid">
+        <div class="mob-task-tile" style="border-left: 3px solid #2563eb;" onclick="mob.showTasksTab('inbound')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">📥</span>
+            <span class="tile-counter" id="mob-inbound-count">4</span>
+          </div>
+          <div class="tile-label">Inbound Receiving</div>
+        </div>
+
+        <div class="mob-task-tile" style="border-left: 3px solid #f59e0b;" onclick="mob.showTasksTab('putaway')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">📦</span>
+            <span class="tile-counter alert" id="mob-putaway-count">3</span>
+          </div>
+          <div class="tile-label">Putaway Tasks</div>
+        </div>
+
+        <div class="mob-task-tile" style="border-left: 3px solid #10b981;" onclick="mob.showTasksTab('picking')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">🛒</span>
+            <span class="tile-counter" id="mob-pick-count">1</span>
+          </div>
+          <div class="tile-label">Line Pick Tasks</div>
+        </div>
+
+        <div class="mob-task-tile" style="border-left: 3px solid #a855f7;" onclick="mob.showView('transfers')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">🔄</span>
+            <span class="tile-counter" id="mob-transfer-count">1</span>
+          </div>
+          <div class="tile-label">P1 ↔ P2 Transfers</div>
+        </div>
+
+        <div class="mob-task-tile" onclick="mob.showView('inventory')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">📊</span>
+            <span class="tile-counter" id="mob-count-tasks">14</span>
+          </div>
+          <div class="tile-label">Bin Stock</div>
+        </div>
+
+        <div class="mob-task-tile" onclick="mob.showView('inventory')">
+          <div class="tile-icon-row">
+            <span class="tile-icon">⚠️</span>
+            <span class="tile-counter alert" id="mob-exceptions-count">1</span>
+          </div>
+          <div class="tile-label">ECU Shortage</div>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);" onclick="mob.showTasksTab('inbound')">
+          <span style="font-size:18px;">📥</span> Inbound Receiving
+        </button>
+        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="mob.showTasksTab('picking')">
+          <span style="font-size:18px;">🛒</span> FIFO Picking
+        </button>
+        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);" onclick="mob.triggerScan('HU-HND-2026-009801')">
+          <span style="font-size:18px;">📷</span> Scan Unit (HU)
+        </button>
+      </div>
+    </section>
+
+    <!-- 2. GATE INWARD VERIFICATION VIEW (For Security Officers) -->
+    <section id="mob-view-gate" class="mobile-view">
+      <div style="background:#1e293b; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:12px;">
+        <h4 style="font-size:14px; font-weight:700; color:#fff; margin-bottom:6px;">🚚 Security Gate Inward Verification</h4>
+        <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">Security Officer Mobile Terminal • Gate 02 (North)</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Truck / Vehicle Reg No</label>
+            <div style="display:flex; gap:6px; margin-top:3px;">
+              <input type="text" id="mob-ge-vehicle" class="top-select" style="flex:1; padding:8px; font-size:12px;" value="KA-01-AB-4821" placeholder="e.g. KA-01-AB-4821">
+              <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; background:#334155;" onclick="mob.quickFillSampleVehicle()">Auto</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Honda OEM Supplier</label>
+            <select id="mob-ge-supplier" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+              <option>Keihin India Electronics Pvt Ltd</option>
+              <option>Mitsuba Sical India Pvt Ltd</option>
+              <option>Nissin Brakes India Pvt Ltd</option>
+              <option>Showa India Pvt Ltd</option>
+              <option>Bando India Pvt Ltd</option>
+              <option>MRF Limited OEM Division</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">PO Number</label>
+              <input type="text" id="mob-ge-po" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="PO-HND-2026-00421">
+            </div>
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Inbound Dock</label>
+              <select id="mob-ge-dock" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+                <option>Dock 04 (Chassis & Brakes)</option>
+                <option>Dock 01 (Powertrain)</option>
+                <option>Dock 02 (Electrical)</option>
+                <option>Dock 03 (Tyres)</option>
+                <option>Dock 05 (Suspension)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Expected Quantity (EA)</label>
+            <input type="number" id="mob-ge-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="500">
+          </div>
+
+          <button class="btn-giant-scan" style="margin-top:6px; padding:12px; background:#10b981;" onclick="mob.submitMobileGateEntry()">
+            ✅ Grant Gate Pass & Register Inward
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:12px; font-weight:800; color:#fff; margin-bottom:8px;">RECENT VEHICLES AT GATE</div>
+      <div id="mob-gate-queue-container"></div>
+    </section>
+
+    <!-- 3. SCANNER WORKFLOW VIEW -->
+    <section id="mob-view-scan" class="mobile-view">
+      <div style="font-size:12px; font-weight:700; margin-bottom:6px; color:#cbd5e1;">SCAN HONDA OEM BARCODE / LPN</div>
+      <div class="scanner-viewport" onclick="mob.triggerScan('HU-HND-2026-009801')">
+        <div class="scanner-laser-line"></div>
+        <span>[ Tap Screen or Aim Zebra Laser at QR/Barcode ]</span>
+      </div>
+
+      <div id="mob-scan-result-card" class="scanned-hu-card">
+        <div style="text-align:center; color:#94a3b8; padding:10px;">Ready to scan next box...</div>
+      </div>
+    </section>
+
+    <!-- 4. TASKS VIEW (With Filter Pills for Inbound, Putaway & Picking) -->
+    <section id="mob-view-tasks" class="mobile-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:13px; font-weight:800; color:#fff;">OPERATIONAL TASKS</span>
+        <span style="font-size:10px; color:#94a3b8;">Zebra HT #04</span>
+      </div>
+
+      <!-- Task Category Filter Tabs -->
+      <div style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
+        <button id="tab-btn-inbound" class="btn-mob-action" style="background:#2563eb; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('inbound')">
+          📥 Inbound Receiving (<span id="count-pill-inbound">4</span>)
+        </button>
+        <button id="tab-btn-putaway" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('putaway')">
+          📦 Putaway (<span id="count-pill-putaway">3</span>)
+        </button>
+        <button id="tab-btn-picking" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('picking')">
+          🛒 Picking (<span id="count-pill-picking">1</span>)
+        </button>
+      </div>
+
+      <div id="mob-task-list-container"></div>
+    </section>
+
+    <!-- 4b. SHOPFLOOR MATERIAL REQUISITION (MR / KANBAN) FOR LINE SUPERVISORS -->
+    <section id="mob-view-mr" class="mobile-view">
+      <div style="background:#1e293b; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:12px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:700; color:#fff; margin:0;">🏭 Line-Side Material Requisition</h4>
+          <span class="wms-badge badge-available">e-Kanban</span>
+        </div>
+        <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">Shopfloor Terminal • Plant 1 Assembly Lines</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Assembly Line</label>
+            <select id="mob-mr-line" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+              <option value="Line 1 (Activa 6G)">Plant 1 - Line 1 (Activa 6G Assembly)</option>
+              <option value="Line 2 (Shine 125)">Plant 1 - Line 2 (Shine 125 Assembly)</option>
+              <option value="Line 3 (Dio 125)">Plant 1 - Line 3 (Dio 125 Assembly)</option>
+              <option value="Line 4 (CB350)">Plant 2 - Line 4 (CB350 Premium)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Select Honda Component</label>
+            <select id="mob-mr-part" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+              <option value="HND-THROT-KEIHIN">HND-THROT-KEIHIN - Keihin Throttle Body Sub-Assy</option>
+              <option value="HND-STR-MITSUBA">HND-STR-MITSUBA - Mitsuba ACG Starter Generator</option>
+              <option value="HND-BRK-NISSIN-01">HND-BRK-NISSIN-01 - Nissin Hydraulic Front Caliper</option>
+              <option value="HND-SHK-SHOWA-01">HND-SHK-SHOWA-01 - Showa Rear Monoshock Damper</option>
+              <option value="HND-BLT-BANDO">HND-BLT-BANDO - Bando High-Torque CVT V-Belt</option>
+              <option value="HND-TYR-MRF-90">HND-TYR-MRF-90 - MRF 90/90-12 Tubeless Tyre</option>
+              <option value="HND-LED-STANLEY">HND-LED-STANLEY - Stanley Dual LED Headlamp</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Required Quantity (EA)</label>
+              <input type="number" id="mob-mr-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="80" min="10" step="10">
+            </div>
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Target Staging Bay</label>
+              <input type="text" id="mob-mr-staging" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="STG-P1-L1" readonly>
+            </div>
+          </div>
+
+          <button class="btn-giant-scan" style="background:linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%); margin-top:4px; padding:11px;" onclick="mob.submitShopfloorMR()">
+            ⚡ Request Part (MR)
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:8px;">RECENT SHOPFLOOR REQUISITIONS</div>
+      <div id="mob-mr-history-container"></div>
+    </section>
+
+    <!-- 5. INTER-PLANT TRANSFERS VIEW (P1 ↔ P2) -->
+    <section id="mob-view-transfers" class="mobile-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <span style="font-size:13px; font-weight:800; color:#fff;">P1 ↔ P2 STOCK TRANSFERS</span>
+        <span class="wms-badge badge-available">Live Logistics</span>
+      </div>
+
+      <div style="background:#1e293b; padding:12px; border-radius:10px; border:1px solid #334155; margin-bottom:12px;">
+        <div style="font-size:11px; font-weight:700; color:#93c5fd; margin-bottom:8px;">🚚 DISPATCH NEW INTER-PLANT TRANSFER</div>
+        <div style="display:flex; flex-direction:column; gap:8px;">
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Source ➔ Destination</label>
+            <select id="mob-tr-route" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;">
+              <option value="P1_TO_P2">HMSI Plant 1 (Scooter) ➔ HMSI Plant 2 (Motorcycle)</option>
+              <option value="P2_TO_P1">HMSI Plant 2 (Motorcycle) ➔ HMSI Plant 1 (Scooter)</option>
+            </select>
+          </div>
+          <div style="display:grid; grid-template-columns:2fr 1fr; gap:6px;">
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Select Part</label>
+              <select id="mob-tr-part" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;">
+                <option value="HND-ECU-KEIHIN-01">HND-ECU-KEIHIN-01 (Keihin ECU)</option>
+                <option value="HND-THROT-KEIHIN">HND-THROT-KEIHIN (Throttle Body)</option>
+                <option value="HND-BRK-NISSIN-01">HND-BRK-NISSIN-01 (Nissin Caliper)</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Qty (EA)</label>
+              <input type="number" id="mob-tr-qty" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;" value="50" min="5">
+            </div>
+          </div>
+          <button class="btn-mob-action primary" style="padding:9px; font-size:11px;" onclick="mob.dispatchTransfer()">
+            🚚 Dispatch Transfer
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:8px;">ACTIVE IN-TRANSIT SHIPMENTS</div>
+      <div id="mob-transfers-list-container"></div>
+    </section>
+
+    <!-- 6. BIN INVENTORY BROWSER VIEW -->
+    <section id="mob-view-inventory" class="mobile-view">
+      <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:10px;">HONDA LOCATION INVENTORY BROWSER</div>
+      <div id="mob-inventory-list-container"></div>
+    </section>
+
+    <!-- 6. MORE & SETTINGS VIEW -->
+    <section id="mob-view-more" class="mobile-view">
+      <div style="background:#1e293b; padding:16px; border-radius:12px; border:1px solid #334155;">
+        <h4 style="font-size:15px; font-weight:700; margin-bottom:12px;">Handheld Terminal Setup</h4>
+        <div style="font-size:12px; line-height:1.8; color:#cbd5e1;">
+          <div>Device Model: <strong>Zebra TC57 Industrial Scanner</strong></div>
+          <div>Scanner Engine: <strong>SE4770 2D Imager (Long Range)</strong></div>
+          <div>AP Connection: <strong>HMSI-Narsapur-AP-Floor-04</strong></div>
+          <div>Active Plant: <strong>HMSI Narsapur Plant 1 (Scooter Division)</strong></div>
+          <div>Assigned Warehouse: <strong>RM-WH-01 (Powertrain & Chassis)</strong></div>
+        </div>
+        <button class="btn-giant-scan" style="margin-top:16px; padding:10px; background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);" onclick="window.open('../web/index.html', '_blank')">
+          🖥️ Open Desktop WMS Console
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Strict FIFO Violation Warning Modal -->
+  <div id="fifo-warning-modal" class="fifo-warning-modal">
+    <div class="fifo-warning-box">
+      <div class="fifo-warning-icon">⛔</div>
+      <div id="fifo-warning-text"></div>
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
+        <button class="btn-mob-action primary" style="padding:10px;" onclick="mob.closeFIFOException()">Scan Correct FIFO Batch</button>
+        <button class="btn-mob-action" style="background:#dc2626; padding:10px;" onclick="mob.supervisorOverrideFIFO()">Authorize Supervisor Override</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Discrepancy & Missing Items Reporting Modal -->
+  <div id="discrepancy-modal" class="fifo-warning-modal">
+    <div class="fifo-warning-box" style="text-align:left;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <h4 style="color:#ef4444; font-size:15px; font-weight:700; margin:0;">⚠️ Report Inbound Discrepancy</h4>
+        <button onclick="mob.closeDiscrepancyModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:11px; color:#cbd5e1; margin-bottom:12px;" id="disc-header-meta">
+        Recording physical shortage / transit damages for incoming PO.
+      </div>
+      <div style="display:flex; flex-direction:column; gap:10px;">
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Discrepancy Type</label>
+          <select id="disc-type" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+            <option value="SHORTAGE">Missing Quantity / Short Delivery</option>
+            <option value="DAMAGED">Damaged Outer Carton / Part Defect</option>
+            <option value="WRONG_ITEM">Wrong Vendor Item Delivered</option>
+            <option value="EXPIRED_RUSTED">Rusted / Moisture / Quality Fail</option>
+          </select>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Short / Damaged Qty</label>
+            <input type="number" id="disc-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="20" min="1">
+          </div>
+          <div>
+            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Accepted (Good) Qty</label>
+            <input type="number" id="disc-good-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="480" min="0">
+          </div>
+        </div>
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Inspector Remarks</label>
+          <textarea id="disc-remarks" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px; height:50px;" placeholder="e.g. 1 box punctured during logistics handling"></textarea>
+        </div>
+        <div style="display:flex; gap:8px; margin-top:8px;">
+          <button class="btn-mob-action" style="flex:1; background:#dc2626; padding:10px;" onclick="mob.submitDiscrepancy()">🚩 Raise Discrepancy & Quarantine</button>
+          <button class="btn-mob-action" style="background:#475569; padding:10px;" onclick="mob.closeDiscrepancyModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dynamic Mobile Toast Alert (Replaces browser alert popup) -->
+  <div id="mob-toast" class="mob-toast">
+    <span id="mob-toast-icon">ℹ️</span>
+    <span id="mob-toast-msg">Notification</span>
+  </div>
+
+  <!-- Dedicated Putaway Bin Strategy Modal (Area, Zone, Bin) -->
+  <div id="putaway-confirm-modal" class="fifo-warning-modal">
+    <div class="mob-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
+        <h4 style="color:#f59e0b; font-size:14px; font-weight:800; margin:0;">📦 Putaway Storage Strategy</h4>
+        <button onclick="mob.closePutawayModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+
+      <div style="background:#0f172a; border-radius:8px; padding:10px; margin-bottom:10px; border:1px solid #1e293b;">
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:11px; color:#94a3b8;">Handling Unit:</span>
+          <strong style="color:#fff; font-size:12px;" id="mob-put-hu">HU-HND-2026-009801</strong>
+        </div>
+        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-size:11px; color:#94a3b8;">Part & Quantity:</span>
+          <strong style="color:#38bdf8; font-size:12px;" id="mob-put-mat">HND-THROT-KEIHIN (80 EA)</strong>
+        </div>
+      </div>
+
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">1. Plant / Warehouse Area</label>
+          <select id="mob-put-area" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onPutawayAreaChange()">
+            <option value="RM-WH-01">HMSI Plant 1 - Main Warehouse (RM-WH-01)</option>
+            <option value="RM-WH-02">HMSI Plant 2 - Motorcycle Bay (RM-WH-02)</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">2. Storage Zone</label>
+          <select id="mob-put-zone" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onPutawayZoneChange()">
+            <option value="ZONE-A-PWR">Zone A - Powertrain & Throttle</option>
+            <option value="ZONE-B-ELE">Zone B - Electronics & ECUs</option>
+            <option value="ZONE-C-SUS">Zone C - Chassis & Suspension</option>
+            <option value="ZONE-D-TYR">Zone D - Tyres & Belts</option>
+          </select>
+        </div>
+
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">3. Target Storage Bin</label>
+          <select id="mob-put-bin" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;">
+            <option value="RM-A03-R04-S02-B05">RM-A03-R04-S02-B05 (Rack 04 • Shelf 02)</option>
+            <option value="RM-A02-R02-S01-B02">RM-A02-R02-S01-B02 (Rack 02 • Shelf 01)</option>
+            <option value="RM-A01-R01-S01-B01">RM-A01-R01-S01-B01 (Rack 01 • Shelf 01)</option>
+          </select>
+        </div>
+
+        <div style="display:flex; gap:6px; margin-top:10px;">
+          <button class="btn-mob-action primary" style="flex:1; background:#f59e0b; padding:9px; font-size:12px; font-weight:700;" onclick="mob.confirmPutawayLocation()">
+            ✅ Confirm Putaway
+          </button>
+          <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closePutawayModal()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reorder PO Modal (Replaces prompt) -->
+  <div id="reorder-po-modal" class="fifo-warning-modal">
+    <div class="mob-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
+        <h4 style="color:#38bdf8; font-size:14px; font-weight:800; margin:0;">📑 Request Reorder PO</h4>
+        <button onclick="mob.closeReorderModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">
+        Raise emergency replen purchase order to SAP S/4HANA for low stock.
+      </div>
+      <div style="display:flex; flex-direction:column; gap:8px;">
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Material Code</label>
+          <input type="text" id="reorder-mat-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" readonly>
+        </div>
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">OEM Supplier</label>
+          <input type="text" id="reorder-supp-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" readonly>
+        </div>
+        <div>
+          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Reorder Quantity (EA)</label>
+          <input type="number" id="reorder-qty-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" value="500" min="10">
+        </div>
+        <div style="display:flex; gap:6px; margin-top:8px;">
+          <button class="btn-mob-action primary" style="flex:1; background:#2563eb; padding:9px; font-size:12px; font-weight:700;" onclick="mob.submitReorderPO()">
+            📑 Send SAP PO
+          </button>
+          <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closeReorderModal()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Supervisor FIFO Override PIN Modal (Replaces prompt) -->
+  <div id="supervisor-pin-modal" class="fifo-warning-modal">
+    <div class="mob-modal-box">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
+        <h4 style="color:#ef4444; font-size:14px; font-weight:800; margin:0;">🔑 Supervisor PIN Override</h4>
+        <button onclick="mob.closeSupervisorModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
+      </div>
+      <div style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">
+        Enter 4-digit HMSI Quality Lead PIN to bypass FIFO sequence:
+      </div>
+      <div>
+        <input type="password" id="supervisor-pin-input" class="top-select" style="width:100%; padding:10px; font-size:16px; text-align:center; letter-spacing:4px;" maxlength="6" value="9942" placeholder="••••">
+      </div>
+      <div style="display:flex; gap:6px; margin-top:12px;">
+        <button class="btn-mob-action" style="flex:1; background:#dc2626; padding:9px; font-size:12px; font-weight:700;" onclick="mob.confirmSupervisorOverride()">
+          ⚠️ Authorize Override
+        </button>
+        <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closeSupervisorModal()">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Handling Unit (HU) Label Barcode Sticker Modal -->
+  <div id="hu-label-modal" class="fifo-warning-modal">
+    <div class="fifo-warning-box" style="text-align:left; background:#ffffff; color:#0f172a; border:2px solid #0f172a;">
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:6px; margin-bottom:8px;">
+        <div style="font-weight:900; font-size:15px; color:#dc2626;">HONDA HMSI • OEM PALLET LABEL</div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; background:#0f172a; color:#fff; padding:2px 6px; border-radius:4px;">HU LABEL</span>
+      </div>
+
+      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; line-height:1.6;" id="hu-label-content">
+        <!-- Dynamic Label Content -->
+      </div>
+
+      <div style="background:#f1f5f9; border:1px dashed #64748b; border-radius:6px; padding:8px; text-align:center; margin:10px 0;">
+        <div style="font-size:24px; letter-spacing:4px; font-family:'JetBrains Mono',monospace; font-weight:900;">||||| | |||| ||| |||| | |||</div>
+        <div style="font-size:11px; font-weight:700; color:#334155;" id="hu-label-barcode-text">HU-HND-2026-009805</div>
+      </div>
+
+      <div style="display:flex; gap:6px; margin-top:10px;">
+        <button class="btn-mob-action" style="flex:1; background:#10b981; color:#fff; font-weight:700; padding:9px;" onclick="mob.printHULabelAlert()">🖨️ Zebra Print (ZPL)</button>
+        <button class="btn-mob-action" style="background:#64748b; color:#fff; padding:9px;" onclick="mob.closeHULabelModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation Bar (Hidden on Login, shown dynamically when logged in as Operator) -->
+  <nav class="mobile-bottom-nav" style="display:none;">
+    <a class="mob-nav-item active" data-view="home" onclick="mob.showView('home')">
+      <span class="icon">🏠</span>
+      <span>Home</span>
+    </a>
+    <a class="mob-nav-item" data-view="gate" onclick="mob.showView('gate')">
+      <span class="icon">🚚</span>
+      <span>Gate In</span>
+    </a>
+    <a class="mob-nav-item" data-view="tasks" onclick="mob.showTasksTab('inbound')">
+      <span class="icon">📥</span>
+      <span>Inbound</span>
+    </a>
+    <a class="mob-nav-item" data-view="scan" onclick="mob.showView('scan')">
+      <span class="icon">📷</span>
+      <span>Scan</span>
+    </a>
+    <a class="mob-nav-item" data-view="inventory" onclick="mob.showView('inventory')">
+      <span class="icon">📦</span>
+      <span>Stock</span>
+    </a>
+    <a class="mob-nav-item" data-view="more" onclick="mob.showView('more')">
+      <span class="icon">⚙️</span>
+      <span>More</span>
+    </a>
+  </nav>
+</div>
+
+<script src="../web/js/wmsData.js"></script>
+<script src="js/mobileApp.js"></script>
+</body>
+</html>
