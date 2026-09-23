@@ -743,12 +743,12 @@ function loadWMSState() {
     const saved = localStorage.getItem(WMS_STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      if (parsed && parsed.materials && parsed.handlingUnits) {
-        if (!parsed.binMaster || !parsed.binMaster.length) parsed.binMaster = WMS_DEFAULT_STATE.binMaster;
-        if (!parsed.userMaster || !parsed.userMaster.length) parsed.userMaster = WMS_DEFAULT_STATE.userMaster;
-        if (!parsed.sapSyncLogs || !parsed.sapSyncLogs.length) parsed.sapSyncLogs = WMS_DEFAULT_STATE.sapSyncLogs;
-        if (!parsed.areaMaster || !parsed.areaMaster.length) parsed.areaMaster = WMS_DEFAULT_STATE.areaMaster;
-        if (!parsed.discrepancies || !parsed.discrepancies.length) parsed.discrepancies = WMS_DEFAULT_STATE.discrepancies;
+      if (parsed && typeof parsed === 'object') {
+        Object.keys(WMS_DEFAULT_STATE).forEach(k => {
+          if (!parsed[k] || (Array.isArray(WMS_DEFAULT_STATE[k]) && (!Array.isArray(parsed[k]) || parsed[k].length === 0))) {
+            parsed[k] = JSON.parse(JSON.stringify(WMS_DEFAULT_STATE[k]));
+          }
+        });
         return parsed;
       }
     }
