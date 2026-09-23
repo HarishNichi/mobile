@@ -115,7 +115,6 @@
         <div class="mob-task-tile" style="border-left: 3px solid #2563eb;" onclick="mob.showTasksTab('inbound')">
           <div class="tile-icon-row">
             <span class="tile-icon">📥</span>
-            <span class="tile-counter" id="mob-inbound-count">4</span>
           </div>
           <div class="tile-label">Inbound Receiving</div>
         </div>
@@ -123,7 +122,6 @@
         <div class="mob-task-tile" style="border-left: 3px solid #f59e0b;" onclick="mob.showTasksTab('putaway')">
           <div class="tile-icon-row">
             <span class="tile-icon">📦</span>
-            <span class="tile-counter alert" id="mob-putaway-count">3</span>
           </div>
           <div class="tile-label">Putaway Tasks</div>
         </div>
@@ -131,7 +129,6 @@
         <div class="mob-task-tile" style="border-left: 3px solid #10b981;" onclick="mob.showTasksTab('picking')">
           <div class="tile-icon-row">
             <span class="tile-icon">🛒</span>
-            <span class="tile-counter" id="mob-pick-count">1</span>
           </div>
           <div class="tile-label">Line Pick Tasks</div>
         </div>
@@ -139,7 +136,6 @@
         <div class="mob-task-tile" style="border-left: 3px solid #a855f7;" onclick="mob.showView('transfers')">
           <div class="tile-icon-row">
             <span class="tile-icon">🔄</span>
-            <span class="tile-counter" id="mob-transfer-count">1</span>
           </div>
           <div class="tile-label">P1 ↔ P2 Transfers</div>
         </div>
@@ -147,7 +143,6 @@
         <div class="mob-task-tile" onclick="mob.showView('inventory')">
           <div class="tile-icon-row">
             <span class="tile-icon">📊</span>
-            <span class="tile-counter" id="mob-count-tasks">14</span>
           </div>
           <div class="tile-label">Bin Stock</div>
         </div>
@@ -155,7 +150,6 @@
         <div class="mob-task-tile" onclick="mob.showView('inventory')">
           <div class="tile-icon-row">
             <span class="tile-icon">⚠️</span>
-            <span class="tile-counter alert" id="mob-exceptions-count">1</span>
           </div>
           <div class="tile-label">ECU Shortage</div>
         </div>
@@ -256,13 +250,13 @@
       <!-- Task Category Filter Tabs -->
       <div style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
         <button id="tab-btn-inbound" class="btn-mob-action" style="background:#2563eb; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('inbound')">
-          📥 Inbound Receiving (<span id="count-pill-inbound">4</span>)
+          📥 Inbound Receiving
         </button>
         <button id="tab-btn-putaway" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('putaway')">
-          📦 Putaway (<span id="count-pill-putaway">3</span>)
+          📦 Putaway
         </button>
         <button id="tab-btn-picking" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('picking')">
-          🛒 Picking (<span id="count-pill-picking">1</span>)
+          🛒 Picking
         </button>
       </div>
 
