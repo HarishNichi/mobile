@@ -2,7 +2,7 @@
 // Enterprise Data Model, FIFO Allocation Engine, CRUD & LocalStorage State Management
 // Narsapur Two-Wheeler Manufacturing Plant 1 & Plant 2
 
-const WMS_STORAGE_KEY = 'HONDA_HMSI_WMS_STATE_V3';
+const WMS_STORAGE_KEY = 'HONDA_HMSI_WMS_STATE_V4';
 
 const WMS_DEFAULT_STATE = {
   activePlant: 'All',
@@ -734,6 +734,31 @@ const WMS_DEFAULT_STATE = {
       timestamp: '23-Sep-2026 10:15:20',
       sapDebitNote: 'SAP-DN-9002189'
     }
+  ],
+
+  // 14. User Master & Authentication Directory (PIN & Badge scan enabled)
+  userMaster: [
+    { userId: 'HND-USR-1002', pin: '1002', badge: 'BDG-002', name: 'Sanjay Verma', role: 'WAREHOUSE_OPERATOR', roleTitle: 'Warehouse Operator', plant: 'HMSI Narsapur Plant 1', warehouse: 'RM-WH-01', shift: 'Shift A' },
+    { userId: 'HND-USR-1003', pin: '1003', badge: 'BDG-003', name: 'Ramesh Gowda', role: 'SECURITY_OFFICER', roleTitle: 'Security Gate Officer', plant: 'HMSI Narsapur Plant 1', warehouse: 'GATE-02', shift: 'Shift A' },
+    { userId: 'HND-USR-1004', pin: '1004', badge: 'BDG-004', name: 'Anand Murthy', role: 'LINE_SUPERVISOR', roleTitle: 'Line 1 Assembly Supervisor', plant: 'HMSI Narsapur Plant 1', warehouse: 'LINE-P1-L1', shift: 'Shift A' },
+    { userId: 'HND-USR-1005', pin: '1005', badge: 'BDG-005', name: 'Vikram Patil', role: 'FORKLIFT_DRIVER', roleTitle: 'Reach Truck / Forklift Driver', plant: 'HMSI Narsapur Plant 1', warehouse: 'RM-WH-01', shift: 'Shift A' }
+  ],
+
+  // 15. Cycle Count Assignments (Blind Count Mode)
+  cycleCounts: [
+    { countId: 'CC-HND-2026-0923-01', binCode: 'RM-A03-R04-S02-B05', materialCode: 'HND-THROT-KEIHIN', expectedQty: 80, countedQty: null, status: 'OPEN', assignedTo: 'HND-USR-1002', priority: 'HIGH', zone: 'Zone A - Powertrain' },
+    { countId: 'CC-HND-2026-0923-02', binCode: 'RM-A02-R02-S01-B02', materialCode: 'HND-STR-MITSUBA', expectedQty: 40, countedQty: null, status: 'OPEN', assignedTo: 'HND-USR-1002', priority: 'NORMAL', zone: 'Zone A - Powertrain' },
+    { countId: 'CC-HND-2026-0923-03', binCode: 'RM-B02-R01-S01-B01', materialCode: 'HND-ECU-KEIHIN-01', expectedQty: 10, countedQty: null, status: 'RECOUNT_REQUIRED', assignedTo: 'HND-USR-1002', priority: 'CRITICAL', zone: 'Zone B - Electronics' }
+  ],
+
+  // 16. Shopfloor Line Returns
+  lineReturns: [
+    { returnId: 'RET-2026-0081', lineId: 'Line 1 (Activa 6G)', materialCode: 'HND-THROT-KEIHIN', quantity: 5, reason: 'DEFECTIVE_COMPONENT', targetBin: 'QC-REJECT-ZONE-01', timestamp: '24-Sep-2026 14:20:10', returnedBy: 'Anand Murthy', status: 'In-Warehouse' }
+  ],
+
+  // 17. Label Reprint Audit Trail
+  reprintLogs: [
+    { logId: 'REP-LOG-901', labelType: 'HU', code: 'HU-HND-2026-009801', printer: 'PRN-DOCK-01', reason: 'DAMAGED_STICKER', requestedBy: 'Sanjay Verma', timestamp: '24-Sep-2026 15:10:00' }
   ]
 };
 

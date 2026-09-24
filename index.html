@@ -6,8 +6,7 @@
   <title>Honda HMSI - Mobile WMS Handheld Terminal</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../web/css/wmsStyle.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/mobile.css">
   <script src="js/wmsData.js"></script>
   <script src="js/mobileApp.js"></script>
@@ -16,368 +15,700 @@
 
 <!-- Smartphone / Rugged Handheld Frame -->
 <div class="mobile-device-wrapper">
-  <!-- Status Bar & Top Notch -->
+  
+  <!-- Status Bar Matching Design -->
   <div class="mobile-status-bar">
-    <span>09:41</span>
-    <div class="mobile-notch"></div>
-    <span>📶 HMSI-WiFi • 98% ⚡</span>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <span>🏭</span>
+      <span style="font-weight:800; font-family:'JetBrains Mono',monospace;">PLANT 04 NARASAPURA</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="display:flex; align-items:center; gap:3px;">
+        <span style="color:#10b981;">📶</span> <span style="font-size:10px; font-weight:800;">WLAN</span>
+      </span>
+      <span style="display:flex; align-items:center; gap:2px; font-weight:800; font-size:10.5px;">
+        🔋 87%
+      </span>
+    </div>
   </div>
 
-  <!-- Mobile App Header -->
-  <header class="mobile-app-header" id="mob-main-header">
-    <div class="mob-header-title">
-      <span style="font-size:16px;" id="mob-header-icon">🛵</span>
-      <h3>HONDA <span id="mob-header-role-title">TERMINAL</span></h3>
+  <!-- Mobile App Header (Shown when logged in) -->
+  <header class="mobile-app-header" id="mob-main-header" style="display:none;">
+    <div style="display:flex; align-items:center; gap:10px;">
+      <div id="mob-header-avatar" style="width:36px; height:36px; border-radius:8px; background:#8b3e00; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px;">
+        RK
+      </div>
+      <div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <strong id="mob-user-name-header" style="font-size:13.5px; font-weight:800; color:#0f172a;">Rajesh Kumar</strong>
+          <span class="mob-hero-tag-action" id="mob-user-shift-badge" style="background:#86efac; color:#14532d; font-size:9px;">SHIFT A</span>
+        </div>
+        <div style="font-size:10.5px; color:#64748b; margin-top:1px; display:flex; align-items:center; gap:4px;">
+          <span style="color:#10b981;">●</span> <span id="mob-user-terminal-meta">Plant 04 • Term #08 Online</span>
+        </div>
+      </div>
     </div>
-    <div class="mob-header-actions" style="display:flex; gap:6px; align-items:center;">
-      <span class="mob-plant-tag" id="mob-header-user-tag" style="display:none;">Op 01</span>
-      <button class="mob-view-toggle-btn" id="mob-header-logout-btn" style="display:none; background:#dc2626; color:#fff; border-color:#dc2626;" title="Logout" onclick="mob.logout()">🚪 Logout</button>
-      <button class="mob-view-toggle-btn" title="Toggle full width" onclick="document.querySelector('.mobile-device-wrapper').classList.toggle('full-width-mode')">⛶</button>
-    </div>
+    <button class="mob-view-toggle-btn" style="background:#e0e7ff; border-color:#c7d2fe; color:#3730a3; font-weight:800; display:flex; align-items:center; gap:4px;" onclick="mob.logout()">
+      ⇄ SWITCH
+    </button>
   </header>
 
   <!-- Mobile Scrollable Body Area -->
   <main class="mobile-body">
     
-    <!-- 0. LOGIN & ROLE SELECTION SCREEN -->
-    <section id="mob-view-login" class="mobile-view active" style="padding:10px 0;">
-      <div style="text-align:center; padding:16px 0 20px 0;">
-        <div style="font-size:36px; margin-bottom:4px;">🛵</div>
-        <h2 style="font-size:18px; font-weight:900; color:#fff; margin:0; letter-spacing:1px;">HONDA MOTORCYCLE & SCOOTER</h2>
-        <div style="font-size:11px; color:#f87171; font-weight:700; text-transform:uppercase; margin-top:2px;">HMSI Narsapur Industrial WMS Terminal</div>
-      </div>
-
-      <div style="background:#1e293b; border-radius:14px; padding:18px; border:1px solid #334155; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.5);">
-        <div style="font-size:11px; font-weight:800; color:#94a3b8; text-transform:uppercase; margin-bottom:12px; letter-spacing:0.5px;">Select Your Shift Operator Role:</div>
-        
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          
-          <!-- Role 1: Security -->
-          <div class="mob-role-card" onclick="mob.login('SECURITY_OFFICER')" style="background:#0f172a; border:1px solid #10b981; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
-            <div style="font-size:26px; background:#064e3b; padding:8px; border-radius:8px;">👮</div>
-            <div style="flex:1;">
-              <div style="color:#fff; font-weight:800; font-size:13px;">Security Gate Officer</div>
-              <div style="font-size:10px; color:#6ee7b7;">Truck Inward, Gate Pass, Vehicle Verification</div>
-            </div>
-            <span style="color:#10b981; font-weight:900;">➔</span>
-          </div>
-
-          <!-- Role 2: Warehouse Op -->
-          <div class="mob-role-card" onclick="mob.login('WAREHOUSE_OP')" style="background:#0f172a; border:1px solid #2563eb; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
-            <div style="font-size:26px; background:#1e3a8a; padding:8px; border-radius:8px;">👷</div>
-            <div style="flex:1;">
-              <div style="color:#fff; font-weight:800; font-size:13px;">Warehouse Operator</div>
-              <div style="font-size:10px; color:#93c5fd;">Dock Inbound, HU Label Printing, FIFO Picking</div>
-            </div>
-            <span style="color:#38bdf8; font-weight:900;">➔</span>
-          </div>
-
-          <!-- Role 3: Line Supervisor -->
-          <div class="mob-role-card" onclick="mob.login('LINE_SUPERVISOR')" style="background:#0f172a; border:1px solid #a855f7; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
-            <div style="font-size:26px; background:#581c87; padding:8px; border-radius:8px;">🏭</div>
-            <div style="flex:1;">
-              <div style="color:#fff; font-weight:800; font-size:13px;">Assembly Line Supervisor</div>
-              <div style="font-size:10px; color:#d8b4fe;">Line Material Requisitions (Kanban MR Request)</div>
-            </div>
-            <span style="color:#c084fc; font-weight:900;">➔</span>
-          </div>
-
-          <!-- Role 4: Forklift Driver -->
-          <div class="mob-role-card" onclick="mob.login('FORKLIFT_DRIVER')" style="background:#0f172a; border:1px solid #f59e0b; border-radius:10px; padding:12px; display:flex; align-items:center; gap:12px; cursor:pointer;">
-            <div style="font-size:26px; background:#78350f; padding:8px; border-radius:8px;">🚜</div>
-            <div style="flex:1;">
-              <div style="color:#fff; font-weight:800; font-size:13px;">Forklift / Reach Truck Driver</div>
-              <div style="font-size:10px; color:#fde68a;">High-Rack Bin Putaway & Storage Strategy</div>
-            </div>
-            <span style="color:#fbbf24; font-weight:900;">➔</span>
-          </div>
-
-        </div>
-      </div>
+    <!-- 0. LOGIN SCREEN (Exact Match with Image 1: Industrial Wedge, Shift selection, Keypad Numpad) -->
+    <section id="mob-view-login" class="mobile-view active">
       
-      <div style="text-align:center; margin-top:14px; font-size:10px; color:#64748b;">
-        Zebra TC57 Handheld Engine • HMSI Narsapur AP Floor 04
-      </div>
-    </section>
-
-    <!-- 1. HOME VIEW -->
-    <section id="mob-view-home" class="mobile-view">
-      <div class="mob-greeting-box">
-        <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+      <!-- Scan Engine Ready Banner -->
+      <div class="mob-scanner-banner">
+        <div class="mob-scanner-banner-left">
+          <div class="mob-scanner-icon">📟</div>
           <div>
-            <div style="font-size:11px; color:#f87171; text-transform:uppercase; font-weight:700;" id="mob-role-badge">Good Morning, Warehouse Operator</div>
-            <div class="user-name" id="mob-user-name">Sanjay Verma (Op 01)</div>
-            <div class="warehouse-meta" id="mob-user-meta">HMSI Plant 1 • Raw Material Warehouse RM-WH-01</div>
+            <strong>SCAN ENGINE READY</strong>
+            <div>Aim terminal laser or key badge...</div>
           </div>
-          <span style="font-size:24px;" id="mob-role-icon">👷</span>
+        </div>
+        <span class="mob-wedge-pill">WEDGE ACTIVE</span>
+      </div>
+
+      <!-- Active Shift Selection -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+        <span style="font-size:10.5px; font-weight:900; color:#475569; letter-spacing:0.5px;">ACTIVE SHIFT SELECTION</span>
+        <span style="font-size:10px; font-weight:800; color:#8b3e00;">AUTO-SYNCED</span>
+      </div>
+
+      <div class="mob-shift-grid">
+        <div class="mob-shift-btn active" onclick="mob.selectShift('A', this)">
+          <div class="shift-name">SHIFT A</div>
+          <div class="shift-time">06:00 - 14:30</div>
+        </div>
+        <div class="mob-shift-btn" onclick="mob.selectShift('B', this)">
+          <div class="shift-name">SHIFT B</div>
+          <div class="shift-time">14:30 - 23:00</div>
+        </div>
+        <div class="mob-shift-btn" onclick="mob.selectShift('C', this)">
+          <div class="shift-name">SHIFT C</div>
+          <div class="shift-time">23:00 - 06:00</div>
         </div>
       </div>
 
-      <div class="mob-tasks-grid">
-        <div class="mob-task-tile" style="border-left: 3px solid #2563eb;" onclick="mob.showTasksTab('inbound')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">📥</span>
-          </div>
-          <div class="tile-label">Inbound Receiving</div>
+      <!-- Operator / Badge Card -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:10px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <span style="font-size:10.5px; font-weight:900; color:#475569; letter-spacing:0.5px;">OPERATOR / BADGE ID</span>
+          <span style="font-size:9.5px; font-weight:800; background:#fef3c7; color:#92400e; padding:2px 6px; border-radius:4px;">TAP NUMPAD OR SCAN</span>
         </div>
 
-        <div class="mob-task-tile" style="border-left: 3px solid #f59e0b;" onclick="mob.showTasksTab('putaway')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">📦</span>
+        <div style="display:flex; align-items:center; background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:8px; padding:8px 12px; justify-content:space-between; margin-bottom:8px;">
+          <div style="display:flex; align-items:center; gap:8px;">
+            <span style="font-size:16px;">🪪</span>
+            <span style="font-size:16px; font-weight:900; font-family:'JetBrains Mono',monospace; color:#0f172a;" id="mob-badge-display">OP-7749</span>
           </div>
-          <div class="tile-label">Putaway Tasks</div>
+          <button style="background:#e2e8f0; border:none; border-radius:6px; width:26px; height:26px; font-weight:800; color:#475569; cursor:pointer;" onclick="mob.clearOperatorInput()">✕</button>
         </div>
 
-        <div class="mob-task-tile" style="border-left: 3px solid #10b981;" onclick="mob.showTasksTab('picking')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">🛒</span>
-          </div>
-          <div class="tile-label">Line Pick Tasks</div>
+        <button class="btn-mob-action" style="width:100%; padding:10px; font-size:12px; font-weight:900; background:#e0e7ff; color:#3730a3; border-color:#c7d2fe; display:flex; align-items:center; justify-content:center; gap:6px;" onclick="mob.quickFillBadge('BDG-002')">
+          <span>📷</span> TAP TO SCAN BADGE
+        </button>
+      </div>
+
+      <!-- 4-Digit PIN Keypad Card -->
+      <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-size:10.5px; font-weight:900; color:#475569; letter-spacing:0.5px;">4-DIGIT SECURITY PIN</span>
+          <span style="font-size:10px; font-weight:800; color:#8b3e00; cursor:pointer;" onclick="mob.clearPin()">CLEAR</span>
         </div>
 
-        <div class="mob-task-tile" style="border-left: 3px solid #a855f7;" onclick="mob.showView('transfers')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">🔄</span>
-          </div>
-          <div class="tile-label">P1 ↔ P2 Transfers</div>
+        <!-- Visual PIN Dots -->
+        <div class="pin-dots-row">
+          <div class="pin-dot" id="pindot-0"></div>
+          <div class="pin-dot" id="pindot-1"></div>
+          <div class="pin-dot" id="pindot-2"></div>
+          <div class="pin-dot" id="pindot-3"></div>
+        </div>
+        <div style="text-align:center; font-size:9.5px; font-weight:800; color:#64748b; font-family:'JetBrains Mono',monospace;" id="pin-instruction-txt">
+          ENTER 4-DIGIT SECURITY PIN
         </div>
 
-        <div class="mob-task-tile" onclick="mob.showView('inventory')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">📊</span>
-          </div>
-          <div class="tile-label">Bin Stock</div>
-        </div>
+        <!-- Light Theme Touch Keypad Numpad -->
+        <div class="numpad-grid">
+          <button class="num-btn" onclick="mob.numpadPress('1')">1</button>
+          <button class="num-btn" onclick="mob.numpadPress('2')">2</button>
+          <button class="num-btn" onclick="mob.numpadPress('3')">3</button>
 
-        <div class="mob-task-tile" onclick="mob.showView('inventory')">
-          <div class="tile-icon-row">
-            <span class="tile-icon">⚠️</span>
-          </div>
-          <div class="tile-label">ECU Shortage</div>
+          <button class="num-btn" onclick="mob.numpadPress('4')">4</button>
+          <button class="num-btn" onclick="mob.numpadPress('5')">5</button>
+          <button class="num-btn" onclick="mob.numpadPress('6')">6</button>
+
+          <button class="num-btn" onclick="mob.numpadPress('7')">7</button>
+          <button class="num-btn" onclick="mob.numpadPress('8')">8</button>
+          <button class="num-btn" onclick="mob.numpadPress('9')">9</button>
+
+          <button class="num-btn" onclick="mob.numpadBackspace()">⌫</button>
+          <button class="num-btn" onclick="mob.numpadPress('0')">0</button>
+          <button class="num-btn submit-btn" onclick="mob.submitLoginWithPin()">➔</button>
         </div>
       </div>
 
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);" onclick="mob.showTasksTab('inbound')">
-          <span style="font-size:18px;">📥</span> Inbound Receiving
+      <!-- Bottom Footnote Actions -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding:0 4px;">
+        <button style="background:none; border:none; color:#0284c7; font-size:11px; font-weight:900; display:flex; align-items:center; gap:4px; cursor:pointer;" onclick="mob.supervisorOverrideFIFO()">
+          🛡️ SUPERVISOR OVERRIDE
         </button>
-        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #10b981 0%, #059669 100%);" onclick="mob.showTasksTab('picking')">
-          <span style="font-size:18px;">🛒</span> FIFO Picking
-        </button>
-        <button class="btn-giant-scan" style="background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);" onclick="mob.triggerScan('HU-HND-2026-009801')">
-          <span style="font-size:18px;">📷</span> Scan Unit (HU)
-        </button>
+        <div style="font-size:10.5px; font-weight:800; color:#64748b; display:flex; align-items:center; gap:4px;">
+          🔒 SECURE WEDGE
+        </div>
       </div>
     </section>
 
-    <!-- 2. GATE INWARD VERIFICATION VIEW (For Security Officers) -->
+    <!-- 1. HOME VIEW (Exact Match with Image 2: Hero Putaway Task + 7 Operational Module Tiles) -->
+    <section id="mob-view-home" class="mobile-view">
+      
+      <!-- Top Priority Hero Banner (LOC-B04-R02 Main Stand Comp) -->
+      <div class="mob-hero-task-card">
+        <div class="hero-header">
+          <div class="hero-tags">
+            <span class="mob-hero-tag-priority">PRIORITY</span>
+            <span class="mob-hero-tag-action">PUTAWAY</span>
+          </div>
+          <span style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:800; color:#94a3b8;">#50530-K04</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:4px;">
+          <div>
+            <div style="font-size:10.5px; color:#cbd5e1; font-weight:700;">BIN:</div>
+            <div class="hero-bin" id="hero-task-bin">LOC-B04-R02</div>
+          </div>
+          <span style="font-size:10px; font-weight:900; background:#0f172a; color:#38bdf8; padding:3px 8px; border-radius:4px; letter-spacing:0.5px;">BAY AISLE 4</span>
+        </div>
+
+        <div class="hero-desc">
+          <span>📦</span> <span id="hero-task-item">Main Stand Comp (50 PCS)</span>
+        </div>
+
+        <button class="mob-hero-start-btn" onclick="mob.showView('putaway')">
+          <span>▶</span> START TASK
+        </button>
+      </div>
+
+      <!-- Operational Modules Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <span style="font-size:12px; font-weight:900; color:#0f172a; letter-spacing:0.5px;">OPERATIONAL MODULES</span>
+          <span style="font-size:10px; font-weight:900; background:#e0e7ff; color:#3730a3; padding:2px 6px; border-radius:6px;">7 ACTIVE</span>
+        </div>
+        <span style="font-size:10px; font-weight:800; color:#64748b;">Quick Access</span>
+      </div>
+
+      <!-- Grid of Light-Themed Operational Modules (Matching Image 2) -->
+      <div class="mob-tasks-grid" id="mob-home-tiles-grid">
+        <!-- Dynamic module tiles rendered by JS -->
+      </div>
+
+      <!-- Label Reprint Full Width Banner Tile (Matching Image 2) -->
+      <div class="mob-task-tile" style="display:flex; justify-content:space-between; align-items:center; padding:12px;" onclick="mob.showView('reprint')">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div class="mob-tile-icon-box" style="background:#dcfce7; color:#15803d;">
+            🖨️
+          </div>
+          <div>
+            <div style="font-size:12px; font-weight:900; color:#0f172a;">Label Reprint</div>
+            <div style="font-size:10px; font-weight:600; color:#64748b; font-family:'JetBrains Mono',monospace;">Zebra Mobile Link Active</div>
+          </div>
+        </div>
+        <span style="font-size:10px; font-weight:900; background:#86efac; color:#14532d; padding:3px 8px; border-radius:12px; display:flex; align-items:center; gap:4px;">
+          <span>●</span> Ready
+        </span>
+      </div>
+    </section>
+
+    <!-- 2. TRUCK CHECK-IN AT GATE / DOCK (H2) -->
     <section id="mob-view-gate" class="mobile-view">
-      <div style="background:#1e293b; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:12px;">
-        <h4 style="font-size:14px; font-weight:700; color:#fff; margin-bottom:6px;">🚚 Security Gate Inward Verification</h4>
-        <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">Security Officer Mobile Terminal • Gate 02 (North)</p>
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">🚚 H2. Truck Gate Check-in</h4>
+          <span style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Gate 02</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:12px;">Scan delivery note / ASN or enter vehicle registration</p>
 
         <div style="display:flex; flex-direction:column; gap:10px;">
           <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Truck / Vehicle Reg No</label>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan ASN / Delivery Note / Vehicle No</label>
             <div style="display:flex; gap:6px; margin-top:3px;">
-              <input type="text" id="mob-ge-vehicle" class="top-select" style="flex:1; padding:8px; font-size:12px;" value="KA-01-AB-4821" placeholder="e.g. KA-01-AB-4821">
-              <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; background:#334155;" onclick="mob.quickFillSampleVehicle()">Auto</button>
+              <input type="text" id="mob-ge-vehicle" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" value="ASN-HND-2026-00391">
+              <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; background:#e0e7ff; color:#3730a3;" onclick="mob.quickScanASNAtGate()">Scan ASN</button>
             </div>
           </div>
 
           <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Honda OEM Supplier</label>
-            <select id="mob-ge-supplier" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
-              <option>Keihin India Electronics Pvt Ltd</option>
-              <option>Mitsuba Sical India Pvt Ltd</option>
-              <option>Nissin Brakes India Pvt Ltd</option>
-              <option>Showa India Pvt Ltd</option>
-              <option>Bando India Pvt Ltd</option>
-              <option>MRF Limited OEM Division</option>
-            </select>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Honda OEM Supplier</label>
+            <input type="text" id="mob-ge-supplier-display" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="Keihin India Electronics Pvt Ltd" readonly>
           </div>
 
           <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
             <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">PO Number</label>
-              <input type="text" id="mob-ge-po" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="PO-HND-2026-00421">
+              <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">PO Number</label>
+              <input type="text" id="mob-ge-po" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px; font-family:'JetBrains Mono',monospace;" value="PO-HND-2026-00421" readonly>
             </div>
             <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Inbound Dock</label>
-              <select id="mob-ge-dock" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
-                <option>Dock 04 (Chassis & Brakes)</option>
-                <option>Dock 01 (Powertrain)</option>
-                <option>Dock 02 (Electrical)</option>
-                <option>Dock 03 (Tyres)</option>
-                <option>Dock 05 (Suspension)</option>
+              <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Expected Qty</label>
+              <input type="text" id="mob-ge-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px; font-weight:800;" value="500 EA" readonly>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Assigned Unloading Dock Bay</label>
+            <div style="padding:10px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:8px; color:#166534; font-size:12px; font-weight:800; margin-top:3px; display:flex; justify-content:space-between; align-items:center;">
+              <span id="mob-ge-dock-assigned">Dock 04 (Chassis & Brakes Bay)</span>
+              <span style="font-size:16px;">📍</span>
+            </div>
+          </div>
+
+          <button class="btn-giant-scan" style="margin-top:6px; padding:11px;" onclick="mob.submitMobileGateEntry()">
+            ✅ Confirm Arrival & Generate Gate Pass
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">GATE VEHICLE QUEUE & DOCKS</div>
+      <div id="mob-gate-queue-container"></div>
+    </section>
+
+    <!-- 3. INBOUND RECEIVING (H3) -->
+    <section id="mob-view-receiving" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">📥 H3. Inbound Material Receiving</h4>
+          <span style="background:#fef3c7; color:#b45309; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">MRN Process</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Select / scan ASN, verify supplier label and confirm quantities.</p>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Select / Scan Inbound ASN</label>
+          <div style="display:flex; gap:6px; margin-top:3px;">
+            <select id="mob-rec-asn-select" class="top-select" style="flex:1; padding:8px; font-size:11px;" onchange="mob.onReceivingASNChange()">
+              <option value="ASN-HND-2026-00391">ASN-00391 | Keihin (500 EA Throttle Body) - PO-421</option>
+              <option value="ASN-HND-2026-00393">ASN-00393 | Keihin (600 EA Throttle Body) - PO-421</option>
+              <option value="ASN-HND-2026-00394">ASN-00394 | Showa (400 SET Shocks) - PO-425</option>
+            </select>
+            <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.triggerScanReceivingMat()">📷 Scan</button>
+          </div>
+        </div>
+
+        <div style="background:#f8fafc; padding:10px; border-radius:8px; border:1px solid #e2e8f0; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+            <span style="color:#64748b;">Material:</span>
+            <strong style="color:#0369a1;" id="mob-rec-mat-name">HND-THROT-KEIHIN</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:11px; margin-bottom:4px;">
+            <span style="color:#64748b;">Expected Qty:</span>
+            <strong style="color:#0f172a;" id="mob-rec-expected-qty">500 EA (Tolerance ±5%)</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; font-size:11px;">
+            <span style="color:#64748b;">Supplier Lot:</span>
+            <strong style="color:#7e22ce;" id="mob-rec-lot">BAT-KEI-2026-09-23-01</strong>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Received Good Qty</label>
+            <input type="number" id="mob-rec-good-qty" class="top-select" style="width:100%; padding:8px; font-size:13px; font-weight:800; margin-top:3px;" value="480" oninput="mob.checkReceivingTolerance()">
+          </div>
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Damaged / Short Qty</label>
+            <input type="number" id="mob-rec-bad-qty" class="top-select" style="width:100%; padding:8px; font-size:13px; font-weight:800; margin-top:3px; color:#b91c1c;" value="20" oninput="mob.checkReceivingTolerance()">
+          </div>
+        </div>
+
+        <div id="mob-rec-reason-box" style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#b91c1c; font-weight:800; text-transform:uppercase;">Damage / Short Reason</label>
+          <select id="mob-rec-reason-code" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;">
+            <option value="TRANSIT_DAMAGE">Transit Damage - Punctured / Broken Crate</option>
+            <option value="PACK_SHORTAGE">Physical Vendor Shortage / Box Missing</option>
+            <option value="RUST_DEFECT">Surface Oxidation / QC Reject</option>
+          </select>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:12px;">
+          <button class="btn-mob-action" style="padding:8px; font-size:11px; background:#f1f5f9;" onclick="mob.captureReceivingPhoto()">
+            📷 Attach Photo <span id="mob-photo-badge" style="display:none; color:#15803d;">(1)</span>
+          </button>
+          <button class="btn-mob-action" style="padding:8px; font-size:11px; background:#e0f2fe; color:#0369a1; border-color:#bae6fd;" onclick="mob.printNearestPalletLabel()">
+            🏷️ Print HU Label
+          </button>
+        </div>
+
+        <button class="btn-giant-scan" style="padding:11px;" onclick="mob.submitCloseReceivingMRN()">
+          📑 Submit Receiving & Create MRN
+        </button>
+      </div>
+    </section>
+
+    <!-- 4. PUTAWAY TASKS (H4) -->
+    <section id="mob-view-putaway" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">📦 H4. High-Rack Bin Putaway</h4>
+          <span style="background:#fef3c7; color:#b45309; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Forklift Op</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Select task or scan HU label, confirm suggested storage bin.</p>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Active Putaway Task</label>
+          <select id="mob-put-task-select" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onPutawayTaskSelect()">
+            <option value="PUT-HND-003">PUT-003 | HU-009809 (MRF Tyres - 130 EA) ➔ RM-D01-R01-S01-B01</option>
+            <option value="PUT-HND-001">PUT-001 | HU-009803 (Keihin Throttle - 120 EA) ➔ RM-A04-R01-S01-B03</option>
+          </select>
+        </div>
+
+        <div style="background:#fef3c7; padding:10px; border-radius:8px; border:1px solid #fde68a; margin-bottom:10px;">
+          <div style="font-size:10px; color:#92400e; font-weight:900; text-transform:uppercase;">Recommended Storage Bin:</div>
+          <div style="font-size:15px; font-weight:900; color:#0f172a; font-family:'JetBrains Mono',monospace; margin-top:2px;" id="mob-put-suggested-bin-txt">RM-D01-R01-S01-B01</div>
+          <div style="font-size:11px; color:#78350f; margin-top:2px;" id="mob-put-item-txt">Material: HND-TYR-MRF-90 | Qty: 130 EA</div>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan Destination Bin Barcode</label>
+          <div style="display:flex; gap:6px; margin-top:3px;">
+            <input type="text" id="mob-put-bin-scan-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan Bin barcode...">
+            <button class="btn-mob-action" style="padding:4px 10px; font-size:11px;" onclick="mob.quickFillCorrectPutawayBin()">Auto Bin</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <button class="btn-mob-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca; padding:8px; font-size:11px;" onclick="mob.triggerBinFullSuggestion()">
+            ⚠️ Bin Full? Suggest Next
+          </button>
+          <button class="btn-mob-action" style="padding:8px; font-size:11px;" onclick="mob.overridePutawayBin()">
+            ✏️ Override Bin
+          </button>
+        </div>
+
+        <button class="btn-giant-scan" style="padding:11px;" onclick="mob.confirmPutawayExecution()">
+          ✅ Confirm Putaway & Store Stock
+        </button>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">PENDING PUTAWAY QUEUE</div>
+      <div id="mob-putaway-queue-container"></div>
+    </section>
+
+    <!-- 5. STOCK ENQUIRY (H5) -->
+    <section id="mob-view-stock-enquiry" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">📊 H5. Stock & FIFO Enquiry</h4>
+          <span style="background:#e0f2fe; color:#0369a1; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Live Query</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Scan Bin to see contents, or scan Part/HU to view all bins & FIFO queue.</p>
+
+        <div style="display:flex; gap:6px; margin-bottom:10px;">
+          <button id="tab-enq-bin" class="btn-mob-action primary" style="flex:1; font-size:11px; padding:6px; color:#ffffff !important;" onclick="mob.setEnquiryMode('BIN')">1. Scan Storage Bin</button>
+          <button id="tab-enq-mat" class="btn-mob-action" style="flex:1; font-size:11px; padding:6px; color:#334155;" onclick="mob.setEnquiryMode('MAT')">2. Scan HU / Part</button>
+        </div>
+
+        <div style="display:flex; gap:6px; margin-bottom:6px;">
+          <input type="text" id="mob-enquiry-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" value="RM-A03-R04-S02-B05">
+          <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; background:#e0f2fe; color:#0369a1;" onclick="mob.executeStockEnquiry()">Search</button>
+        </div>
+      </div>
+
+      <div id="mob-enquiry-results-container"></div>
+    </section>
+
+    <!-- 6. CYCLE COUNTING (H6) -->
+    <section id="mob-view-cycle-count" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">🔄 H6. Blind Cycle Counting</h4>
+          <span style="background:#f3e8ff; color:#7e22ce; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Blind Count</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">System expected quantities are hidden. Physical scan required.</p>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Assigned Count Task</label>
+          <select id="mob-cc-task-select" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onCycleCountTaskSelect()">
+            <option value="CC-HND-2026-0923-01">CC-0923-01 | Bin: RM-A03-R04-S02-B05 (Keihin Throttle)</option>
+            <option value="CC-HND-2026-0923-02">CC-0923-02 | Bin: RM-A02-R02-S01-B02 (Mitsuba Starter)</option>
+            <option value="CC-HND-2026-0923-03">CC-0923-03 | Recount: RM-B02-R01-S01-B01 (Keihin ECU)</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">1. Scan Target Bin Barcode</label>
+          <div style="display:flex; gap:6px; margin-top:3px;">
+            <input type="text" id="mob-cc-bin-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan Bin barcode...">
+            <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.quickScanCCBin()">Verify Bin</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">2. Scan Material / HU Barcode</label>
+          <div style="display:flex; gap:6px; margin-top:3px;">
+            <input type="text" id="mob-cc-mat-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan HU or Mat barcode...">
+            <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.quickScanCCMat()">Verify HU</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">3. Physically Counted Quantity (EA)</label>
+          <input type="number" id="mob-cc-qty-input" class="top-select" style="width:100%; padding:9px; font-size:15px; font-weight:800; text-align:center; margin-top:3px;" placeholder="0">
+        </div>
+
+        <button class="btn-giant-scan" style="padding:11px;" onclick="mob.submitCycleCount()">
+          ✅ Submit Count & Advance Next Bin
+        </button>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">TODAY'S CYCLE COUNT SCHEDULE</div>
+      <div id="mob-cycle-count-list-container"></div>
+    </section>
+
+    <!-- 7. STRICT FIFO PICKING (H7) -->
+    <section id="mob-view-picking" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">🛒 H7. Strict FIFO Picking</h4>
+          <span style="background:#fee2e2; color:#b91c1c; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Strict FIFO</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Pick task: Oldest lot allocated. Scan bin, HU and confirm qty.</p>
+
+        <div style="background:#f8fafc; border-radius:10px; padding:12px; border:1px solid #cbd5e1; margin-bottom:10px;">
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span style="font-size:10px; color:#64748b; font-weight:800;">TARGET BIN:</span>
+            <strong style="color:#0f172a; font-family:'JetBrains Mono',monospace; font-size:13px;" id="mob-pick-bin-target">RM-A03-R04-S02-B05</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
+            <span style="font-size:10px; color:#64748b; font-weight:800;">MANDATORY LOT (FIFO #1):</span>
+            <strong style="color:#15803d; font-family:'JetBrains Mono',monospace; font-size:12px;" id="mob-pick-lot-target">BAT-KEI-2026-09-18-01</strong>
+          </div>
+          <div style="display:flex; justify-content:space-between;">
+            <span style="font-size:10px; color:#64748b; font-weight:800;">PART & QTY:</span>
+            <strong style="color:#0369a1; font-size:12px;" id="mob-pick-qty-target">HND-THROT-KEIHIN (80 EA)</strong>
+          </div>
+        </div>
+
+        <div style="display:flex; flex-direction:column; gap:8px; margin-bottom:10px;">
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">1. Scan Location Bin</label>
+            <input type="text" id="mob-pick-scan-bin" class="top-select" style="width:100%; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace; margin-top:2px;" placeholder="Scan Bin...">
+          </div>
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">2. Scan HU / LPN Barcode</label>
+            <input type="text" id="mob-pick-scan-hu" class="top-select" style="width:100%; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace; margin-top:2px;" placeholder="Scan HU barcode...">
+          </div>
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
+            <button class="btn-mob-action" style="padding:6px; font-size:11px; background:#dcfce7; color:#15803d; border-color:#bbf7d0;" onclick="mob.quickFillCorrectFIFOHU()">Auto Scan FIFO HU</button>
+            <button class="btn-mob-action" style="padding:6px; font-size:11px; background:#fee2e2; color:#b91c1c; border-color:#fecaca;" onclick="mob.quickTestNonFIFOHU()">Test Non-FIFO HU</button>
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px;">
+          <button class="btn-mob-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca; padding:8px; font-size:11px;" onclick="mob.reportShortPick()">
+            ⚠️ Short Pick
+          </button>
+          <button class="btn-mob-action" style="padding:8px; font-size:11px;" onclick="mob.printPickSlipModal()">
+            📄 Pick Slip
+          </button>
+        </div>
+
+        <button class="btn-giant-scan" style="padding:11px;" onclick="mob.confirmFIFOPick()">
+          🛒 Confirm Pick & Move to Staging
+        </button>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">OPEN PICKING ORDERS</div>
+      <div id="mob-pick-queue-container"></div>
+    </section>
+
+    <!-- 8. ISSUE TO LINE (H8) -->
+    <section id="mob-view-issue-line" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">🏭 H8. Issue to Assembly Line</h4>
+          <span style="background:#e0e7ff; color:#3730a3; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">SAP GI 261</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Scan pick list / trolley barcode and lineside staging drop point.</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">1. Scan Pick List / Trolley Barcode</label>
+            <div style="display:flex; gap:6px; margin-top:3px;">
+              <input type="text" id="mob-issue-trolley-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" value="PL-HND-2026-00129">
+              <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.verifyTrolleyBarcode()">Verify</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">2. Target Assembly Line Side</label>
+            <input type="text" id="mob-issue-line-target" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="Plant 1 - Line 1 (Activa 6G Final Assembly)" readonly>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">3. Scan Staging Barcode</label>
+            <div style="display:flex; gap:6px; margin-top:3px;">
+              <input type="text" id="mob-issue-stg-scan" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan STG-P1-L1...">
+              <button class="btn-mob-action" style="padding:4px 8px; font-size:11px; background:#dcfce7; color:#15803d;" onclick="document.getElementById('mob-issue-stg-scan').value='STG-P1-L1'">Auto Scan</button>
+            </div>
+          </div>
+
+          <div style="padding:10px; background:#f8fafc; border-radius:8px; border:1px solid #e2e8f0; font-size:11px; line-height:1.6;">
+            <div>Delivering: <strong>HND-THROT-KEIHIN (80 EA)</strong></div>
+            <div>SAP Movement: <span style="color:#15803d; font-weight:800;">261 (Goods Issue for Order)</span></div>
+          </div>
+
+          <button class="btn-giant-scan" style="padding:11px;" onclick="mob.confirmLineIssueGI()">
+            🚀 Confirm Delivery & Post SAP GI
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">RECENT LINE DISPATCHES</div>
+      <div id="mob-issue-history-container"></div>
+    </section>
+
+    <!-- 9. RETURNS FROM LINE (H9) -->
+    <section id="mob-view-returns" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">↩️ H9. Returns from Assembly Line</h4>
+          <span style="background:#fee2e2; color:#b91c1c; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Shopfloor Return</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Return unused or defective parts back to warehouse stock.</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Returning Assembly Line</label>
+            <select id="mob-ret-line" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+              <option value="Line 1 (Activa 6G)">Plant 1 - Line 1 (Activa 6G)</option>
+              <option value="Line 2 (Shine 125)">Plant 1 - Line 2 (Shine 125)</option>
+              <option value="Line 3 (Dio 125)">Plant 1 - Line 3 (Dio 125)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan / Select Material</label>
+            <select id="mob-ret-mat" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
+              <option value="HND-THROT-KEIHIN">HND-THROT-KEIHIN - Keihin Throttle Body</option>
+              <option value="HND-STR-MITSUBA">HND-STR-MITSUBA - Mitsuba ACG Starter</option>
+              <option value="HND-SHK-SHOWA">HND-SHK-SHOWA - Showa Front Suspension</option>
+            </select>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
+            <div>
+              <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Return Qty (EA)</label>
+              <input type="number" id="mob-ret-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="5" min="1">
+            </div>
+            <div>
+              <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Return Reason</label>
+              <select id="mob-ret-reason" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;">
+                <option value="DEFECTIVE_COMPONENT">Defective Component</option>
+                <option value="EXCESS_MATERIAL">Excess Kitted Material</option>
+                <option value="LINE_STOP_CANCEL">Shift Plan Changed</option>
               </select>
             </div>
           </div>
 
           <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Expected Quantity (EA)</label>
-            <input type="number" id="mob-ge-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="500">
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Target Putaway Bin</label>
+            <input type="text" id="mob-ret-target-bin" class="top-select" style="width:100%; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace; margin-top:3px;" value="QC-REJECT-ZONE-01" readonly>
           </div>
 
-          <button class="btn-giant-scan" style="margin-top:6px; padding:12px; background:#10b981;" onclick="mob.submitMobileGateEntry()">
-            ✅ Grant Gate Pass & Register Inward
+          <button class="btn-giant-scan" style="padding:11px;" onclick="mob.submitLineReturn()">
+            📦 Accept Return & Generate Putaway
           </button>
         </div>
       </div>
 
-      <div style="font-size:12px; font-weight:800; color:#fff; margin-bottom:8px;">RECENT VEHICLES AT GATE</div>
-      <div id="mob-gate-queue-container"></div>
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">RECENT SHOPFLOOR RETURNS</div>
+      <div id="mob-returns-history-container"></div>
     </section>
 
-    <!-- 3. SCANNER WORKFLOW VIEW -->
+    <!-- 10. LABEL REPRINT (H10) -->
+    <section id="mob-view-reprint" class="mobile-view">
+      <div style="background:#ffffff; padding:14px; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:12px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+          <h4 style="font-size:14px; font-weight:800; color:#0f172a; margin:0;">🏷️ H10. Industrial Label Reprint</h4>
+          <span style="background:#dcfce7; color:#15803d; font-size:10px; font-weight:800; padding:2px 6px; border-radius:4px;">Zebra ZPL</span>
+        </div>
+        <p style="font-size:11px; color:#64748b; margin-bottom:10px;">Reprint Pallet HU, Storage Bin, or Pick Slip labels.</p>
+
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Label Category</label>
+            <select id="mob-rep-type" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" onchange="mob.onReprintTypeChange()">
+              <option value="HU">Pallet / Handling Unit (HU) Label</option>
+              <option value="BIN">Storage Bin Location Label</option>
+              <option value="PICK_SLIP">Pick List / Issue Slip</option>
+              <option value="MRN_COPY">MRN / GRN Document Copy</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan / Enter Identifier Code</label>
+            <div style="display:flex; gap:6px; margin-top:3px;">
+              <input type="text" id="mob-rep-code" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" value="HU-HND-2026-009801">
+              <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.triggerScanReprint()">📷 Scan</button>
+            </div>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Target Zebra Printer</label>
+            <select id="mob-rep-printer" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;">
+              <option value="PRN-DOCK-01">Zebra ZT411 - Central Inbound Dock 01 (10.42.18.101)</option>
+              <option value="PRN-WH-02">Zebra ZD621 - Warehouse Aisle 04 (10.42.18.102)</option>
+              <option value="PRN-LINE-01">Zebra ZT610 - Line 1 Staging Point (10.42.18.105)</option>
+              <option value="PRN-MOBILE-03">Zebra ZQ630 - Forklift Mobile Belt Printer (Bluetooth)</option>
+            </select>
+          </div>
+
+          <div>
+            <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Reprint Reason (Audit Logged)</label>
+            <select id="mob-rep-reason" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;">
+              <option value="DAMAGED_STICKER">Damaged / Torn Barcode Sticker</option>
+              <option value="SMUDGED_BARCODE">Smudged / Unreadable by Laser</option>
+              <option value="SPLIT_PALLET">Pallet Split into Smaller Totes</option>
+              <option value="LOST_TAG">Missing Physical Label on Bin</option>
+            </select>
+          </div>
+
+          <button class="btn-giant-scan" style="padding:11px;" onclick="mob.executeLabelReprint()">
+            🖨️ Send ZPL Print Job & Log Reason
+          </button>
+        </div>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin-bottom:8px;">LABEL REPRINT AUDIT TRAIL</div>
+      <div id="mob-reprint-history-container"></div>
+    </section>
+
+    <!-- GENERAL SCANNER WORKFLOW VIEW -->
     <section id="mob-view-scan" class="mobile-view">
-      <div style="font-size:12px; font-weight:700; margin-bottom:6px; color:#cbd5e1;">SCAN HONDA OEM BARCODE / LPN</div>
+      <div style="font-size:12px; font-weight:800; margin-bottom:6px; color:#334155;">SCAN HONDA OEM BARCODE / LPN / BIN</div>
       <div class="scanner-viewport" onclick="mob.triggerScan('HU-HND-2026-009801')">
         <div class="scanner-laser-line"></div>
         <span>[ Tap Screen or Aim Zebra Laser at QR/Barcode ]</span>
       </div>
 
       <div id="mob-scan-result-card" class="scanned-hu-card">
-        <div style="text-align:center; color:#94a3b8; padding:10px;">Ready to scan next box...</div>
+        <div style="text-align:center; color:#64748b; padding:10px;">Ready to scan next barcode...</div>
       </div>
     </section>
 
-    <!-- 4. TASKS VIEW (With Filter Pills for Inbound, Putaway & Picking) -->
-    <section id="mob-view-tasks" class="mobile-view">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-size:13px; font-weight:800; color:#fff;">OPERATIONAL TASKS</span>
-        <span style="font-size:10px; color:#94a3b8;">Zebra HT #04</span>
-      </div>
-
-      <!-- Task Category Filter Tabs -->
-      <div style="display:flex; gap:6px; margin-bottom:12px; overflow-x:auto; padding-bottom:4px;">
-        <button id="tab-btn-inbound" class="btn-mob-action" style="background:#2563eb; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('inbound')">
-          📥 Inbound Receiving
-        </button>
-        <button id="tab-btn-putaway" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('putaway')">
-          📦 Putaway
-        </button>
-        <button id="tab-btn-picking" class="btn-mob-action" style="background:#334155; font-size:11px; padding:6px 10px; flex:none;" onclick="mob.setTaskCategory('picking')">
-          🛒 Picking
-        </button>
-      </div>
-
-      <div id="mob-task-list-container"></div>
-    </section>
-
-    <!-- 4b. SHOPFLOOR MATERIAL REQUISITION (MR / KANBAN) FOR LINE SUPERVISORS -->
-    <section id="mob-view-mr" class="mobile-view">
-      <div style="background:#1e293b; padding:14px; border-radius:12px; border:1px solid #334155; margin-bottom:12px;">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-          <h4 style="font-size:14px; font-weight:700; color:#fff; margin:0;">🏭 Line-Side Material Requisition</h4>
-          <span class="wms-badge badge-available">e-Kanban</span>
-        </div>
-        <p style="font-size:11px; color:#94a3b8; margin-bottom:12px;">Shopfloor Terminal • Plant 1 Assembly Lines</p>
-
-        <div style="display:flex; flex-direction:column; gap:10px;">
-          <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Assembly Line</label>
-            <select id="mob-mr-line" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
-              <option value="Line 1 (Activa 6G)">Plant 1 - Line 1 (Activa 6G Assembly)</option>
-              <option value="Line 2 (Shine 125)">Plant 1 - Line 2 (Shine 125 Assembly)</option>
-              <option value="Line 3 (Dio 125)">Plant 1 - Line 3 (Dio 125 Assembly)</option>
-              <option value="Line 4 (CB350)">Plant 2 - Line 4 (CB350 Premium)</option>
-            </select>
-          </div>
-
-          <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Select Honda Component</label>
-            <select id="mob-mr-part" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
-              <option value="HND-THROT-KEIHIN">HND-THROT-KEIHIN - Keihin Throttle Body Sub-Assy</option>
-              <option value="HND-STR-MITSUBA">HND-STR-MITSUBA - Mitsuba ACG Starter Generator</option>
-              <option value="HND-BRK-NISSIN-01">HND-BRK-NISSIN-01 - Nissin Hydraulic Front Caliper</option>
-              <option value="HND-SHK-SHOWA-01">HND-SHK-SHOWA-01 - Showa Rear Monoshock Damper</option>
-              <option value="HND-BLT-BANDO">HND-BLT-BANDO - Bando High-Torque CVT V-Belt</option>
-              <option value="HND-TYR-MRF-90">HND-TYR-MRF-90 - MRF 90/90-12 Tubeless Tyre</option>
-              <option value="HND-LED-STANLEY">HND-LED-STANLEY - Stanley Dual LED Headlamp</option>
-            </select>
-          </div>
-
-          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-            <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Required Quantity (EA)</label>
-              <input type="number" id="mob-mr-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="80" min="10" step="10">
-            </div>
-            <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Target Staging Bay</label>
-              <input type="text" id="mob-mr-staging" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="STG-P1-L1" readonly>
-            </div>
-          </div>
-
-          <button class="btn-giant-scan" style="background:linear-gradient(135deg, #7e22ce 0%, #6b21a8 100%); margin-top:4px; padding:11px;" onclick="mob.submitShopfloorMR()">
-            ⚡ Request Part (MR)
-          </button>
-        </div>
-      </div>
-
-      <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:8px;">RECENT SHOPFLOOR REQUISITIONS</div>
-      <div id="mob-mr-history-container"></div>
-    </section>
-
-    <!-- 5. INTER-PLANT TRANSFERS VIEW (P1 ↔ P2) -->
-    <section id="mob-view-transfers" class="mobile-view">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-        <span style="font-size:13px; font-weight:800; color:#fff;">P1 ↔ P2 STOCK TRANSFERS</span>
-        <span class="wms-badge badge-available">Live Logistics</span>
-      </div>
-
-      <div style="background:#1e293b; padding:12px; border-radius:10px; border:1px solid #334155; margin-bottom:12px;">
-        <div style="font-size:11px; font-weight:700; color:#93c5fd; margin-bottom:8px;">🚚 DISPATCH NEW INTER-PLANT TRANSFER</div>
-        <div style="display:flex; flex-direction:column; gap:8px;">
-          <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Source ➔ Destination</label>
-            <select id="mob-tr-route" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;">
-              <option value="P1_TO_P2">HMSI Plant 1 (Scooter) ➔ HMSI Plant 2 (Motorcycle)</option>
-              <option value="P2_TO_P1">HMSI Plant 2 (Motorcycle) ➔ HMSI Plant 1 (Scooter)</option>
-            </select>
-          </div>
-          <div style="display:grid; grid-template-columns:2fr 1fr; gap:6px;">
-            <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Select Part</label>
-              <select id="mob-tr-part" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;">
-                <option value="HND-ECU-KEIHIN-01">HND-ECU-KEIHIN-01 (Keihin ECU)</option>
-                <option value="HND-THROT-KEIHIN">HND-THROT-KEIHIN (Throttle Body)</option>
-                <option value="HND-BRK-NISSIN-01">HND-BRK-NISSIN-01 (Nissin Caliper)</option>
-              </select>
-            </div>
-            <div>
-              <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Qty (EA)</label>
-              <input type="number" id="mob-tr-qty" class="top-select" style="width:100%; padding:7px; font-size:11px; margin-top:3px;" value="50" min="5">
-            </div>
-          </div>
-          <button class="btn-mob-action primary" style="padding:9px; font-size:11px;" onclick="mob.dispatchTransfer()">
-            🚚 Dispatch Transfer
-          </button>
-        </div>
-      </div>
-
-      <div style="font-size:12px; font-weight:700; color:#fff; margin-bottom:8px;">ACTIVE IN-TRANSIT SHIPMENTS</div>
-      <div id="mob-transfers-list-container"></div>
-    </section>
-
-    <!-- 6. BIN INVENTORY BROWSER VIEW -->
-    <section id="mob-view-inventory" class="mobile-view">
-      <div style="font-size:13px; font-weight:800; color:#fff; margin-bottom:10px;">HONDA LOCATION INVENTORY BROWSER</div>
-      <div id="mob-inventory-list-container"></div>
-    </section>
-
-    <!-- 6. MORE & SETTINGS VIEW -->
+    <!-- MORE & SETTINGS VIEW -->
     <section id="mob-view-more" class="mobile-view">
-      <div style="background:#1e293b; padding:16px; border-radius:12px; border:1px solid #334155;">
-        <h4 style="font-size:15px; font-weight:700; margin-bottom:12px;">Handheld Terminal Setup</h4>
-        <div style="font-size:12px; line-height:1.8; color:#cbd5e1;">
-          <div>Device Model: <strong>Zebra TC57 Industrial Scanner</strong></div>
-          <div>Scanner Engine: <strong>SE4770 2D Imager (Long Range)</strong></div>
-          <div>AP Connection: <strong>HMSI-Narsapur-AP-Floor-04</strong></div>
-          <div>Active Plant: <strong>HMSI Narsapur Plant 1 (Scooter Division)</strong></div>
+      <div style="background:#ffffff; padding:16px; border-radius:12px; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
+        <h4 style="font-size:15px; font-weight:800; margin-bottom:12px; color:#0f172a;">Handheld Terminal Setup</h4>
+        <div style="font-size:12px; line-height:1.8; color:#334155;">
+          <div>Device Model: <strong>Zebra TC57 Industrial Handheld</strong></div>
+          <div>Scanner Engine: <strong>SE4770 2D Imager (Wedge Active)</strong></div>
+          <div>AP Connection: <strong>HMSI-Narasapura-WLAN-Floor-04</strong></div>
+          <div>Active Plant: <strong>Plant 04 Narasapura (Scooter Division)</strong></div>
           <div>Assigned Warehouse: <strong>RM-WH-01 (Powertrain & Chassis)</strong></div>
         </div>
-        <button class="btn-giant-scan" style="margin-top:16px; padding:10px; background:linear-gradient(135deg, #dc2626 0%, #991b1b 100%);" onclick="window.open('../web/index.html', '_blank')">
+        <button class="btn-giant-scan" style="margin-top:16px; padding:10px;" onclick="window.open('../web/index.html', '_blank')">
           🖥️ Open Desktop WMS Console
         </button>
       </div>
@@ -388,177 +719,11 @@
   <!-- Strict FIFO Violation Warning Modal -->
   <div id="fifo-warning-modal" class="fifo-warning-modal">
     <div class="fifo-warning-box">
-      <div class="fifo-warning-icon">⛔</div>
+      <div style="font-size:28px; text-align:center; margin-bottom:6px;">⛔</div>
       <div id="fifo-warning-text"></div>
       <div style="display:flex; flex-direction:column; gap:8px; margin-top:16px;">
         <button class="btn-mob-action primary" style="padding:10px;" onclick="mob.closeFIFOException()">Scan Correct FIFO Batch</button>
-        <button class="btn-mob-action" style="background:#dc2626; padding:10px;" onclick="mob.supervisorOverrideFIFO()">Authorize Supervisor Override</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Discrepancy & Missing Items Reporting Modal -->
-  <div id="discrepancy-modal" class="fifo-warning-modal">
-    <div class="fifo-warning-box" style="text-align:left;">
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-        <h4 style="color:#ef4444; font-size:15px; font-weight:700; margin:0;">⚠️ Report Inbound Discrepancy</h4>
-        <button onclick="mob.closeDiscrepancyModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
-      </div>
-      <div style="font-size:11px; color:#cbd5e1; margin-bottom:12px;" id="disc-header-meta">
-        Recording physical shortage / transit damages for incoming PO.
-      </div>
-      <div style="display:flex; flex-direction:column; gap:10px;">
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Discrepancy Type</label>
-          <select id="disc-type" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;">
-            <option value="SHORTAGE">Missing Quantity / Short Delivery</option>
-            <option value="DAMAGED">Damaged Outer Carton / Part Defect</option>
-            <option value="WRONG_ITEM">Wrong Vendor Item Delivered</option>
-            <option value="EXPIRED_RUSTED">Rusted / Moisture / Quality Fail</option>
-          </select>
-        </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
-          <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Short / Damaged Qty</label>
-            <input type="number" id="disc-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="20" min="1">
-          </div>
-          <div>
-            <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Accepted (Good) Qty</label>
-            <input type="number" id="disc-good-qty" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px;" value="480" min="0">
-          </div>
-        </div>
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Inspector Remarks</label>
-          <textarea id="disc-remarks" class="top-select" style="width:100%; padding:8px; font-size:12px; margin-top:3px; height:50px;" placeholder="e.g. 1 box punctured during logistics handling"></textarea>
-        </div>
-        <div style="display:flex; gap:8px; margin-top:8px;">
-          <button class="btn-mob-action" style="flex:1; background:#dc2626; padding:10px;" onclick="mob.submitDiscrepancy()">🚩 Raise Discrepancy & Quarantine</button>
-          <button class="btn-mob-action" style="background:#475569; padding:10px;" onclick="mob.closeDiscrepancyModal()">Cancel</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Dynamic Mobile Toast Alert (Replaces browser alert popup) -->
-  <div id="mob-toast" class="mob-toast">
-    <span id="mob-toast-icon">ℹ️</span>
-    <span id="mob-toast-msg">Notification</span>
-  </div>
-
-  <!-- Dedicated Putaway Bin Strategy Modal (Area, Zone, Bin) -->
-  <div id="putaway-confirm-modal" class="fifo-warning-modal">
-    <div class="mob-modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
-        <h4 style="color:#f59e0b; font-size:14px; font-weight:800; margin:0;">📦 Putaway Storage Strategy</h4>
-        <button onclick="mob.closePutawayModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
-      </div>
-
-      <div style="background:#0f172a; border-radius:8px; padding:10px; margin-bottom:10px; border:1px solid #1e293b;">
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span style="font-size:11px; color:#94a3b8;">Handling Unit:</span>
-          <strong style="color:#fff; font-size:12px;" id="mob-put-hu">HU-HND-2026-009801</strong>
-        </div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span style="font-size:11px; color:#94a3b8;">Part & Quantity:</span>
-          <strong style="color:#38bdf8; font-size:12px;" id="mob-put-mat">HND-THROT-KEIHIN (80 EA)</strong>
-        </div>
-      </div>
-
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">1. Plant / Warehouse Area</label>
-          <select id="mob-put-area" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onPutawayAreaChange()">
-            <option value="RM-WH-01">HMSI Plant 1 - Main Warehouse (RM-WH-01)</option>
-            <option value="RM-WH-02">HMSI Plant 2 - Motorcycle Bay (RM-WH-02)</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">2. Storage Zone</label>
-          <select id="mob-put-zone" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" onchange="mob.onPutawayZoneChange()">
-            <option value="ZONE-A-PWR">Zone A - Powertrain & Throttle</option>
-            <option value="ZONE-B-ELE">Zone B - Electronics & ECUs</option>
-            <option value="ZONE-C-SUS">Zone C - Chassis & Suspension</option>
-            <option value="ZONE-D-TYR">Zone D - Tyres & Belts</option>
-          </select>
-        </div>
-
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">3. Target Storage Bin</label>
-          <select id="mob-put-bin" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;">
-            <option value="RM-A03-R04-S02-B05">RM-A03-R04-S02-B05 (Rack 04 • Shelf 02)</option>
-            <option value="RM-A02-R02-S01-B02">RM-A02-R02-S01-B02 (Rack 02 • Shelf 01)</option>
-            <option value="RM-A01-R01-S01-B01">RM-A01-R01-S01-B01 (Rack 01 • Shelf 01)</option>
-          </select>
-        </div>
-
-        <div style="display:flex; gap:6px; margin-top:10px;">
-          <button class="btn-mob-action primary" style="flex:1; background:#f59e0b; padding:9px; font-size:12px; font-weight:700;" onclick="mob.confirmPutawayLocation()">
-            ✅ Confirm Putaway
-          </button>
-          <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closePutawayModal()">
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Reorder PO Modal (Replaces prompt) -->
-  <div id="reorder-po-modal" class="fifo-warning-modal">
-    <div class="mob-modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
-        <h4 style="color:#38bdf8; font-size:14px; font-weight:800; margin:0;">📑 Request Reorder PO</h4>
-        <button onclick="mob.closeReorderModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
-      </div>
-      <div style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">
-        Raise emergency replen purchase order to SAP S/4HANA for low stock.
-      </div>
-      <div style="display:flex; flex-direction:column; gap:8px;">
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Material Code</label>
-          <input type="text" id="reorder-mat-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" readonly>
-        </div>
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">OEM Supplier</label>
-          <input type="text" id="reorder-supp-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" readonly>
-        </div>
-        <div>
-          <label style="font-size:10px; color:#94a3b8; font-weight:700; text-transform:uppercase;">Reorder Quantity (EA)</label>
-          <input type="number" id="reorder-qty-input" class="top-select" style="width:100%; padding:8px; font-size:11px; margin-top:3px;" value="500" min="10">
-        </div>
-        <div style="display:flex; gap:6px; margin-top:8px;">
-          <button class="btn-mob-action primary" style="flex:1; background:#2563eb; padding:9px; font-size:12px; font-weight:700;" onclick="mob.submitReorderPO()">
-            📑 Send SAP PO
-          </button>
-          <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closeReorderModal()">
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Supervisor FIFO Override PIN Modal (Replaces prompt) -->
-  <div id="supervisor-pin-modal" class="fifo-warning-modal">
-    <div class="mob-modal-box">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid #334155; padding-bottom:8px; margin-bottom:10px;">
-        <h4 style="color:#ef4444; font-size:14px; font-weight:800; margin:0;">🔑 Supervisor PIN Override</h4>
-        <button onclick="mob.closeSupervisorModal()" style="background:none; border:none; color:#94a3b8; font-size:18px; cursor:pointer;">✕</button>
-      </div>
-      <div style="font-size:11px; color:#cbd5e1; margin-bottom:10px;">
-        Enter 4-digit HMSI Quality Lead PIN to bypass FIFO sequence:
-      </div>
-      <div>
-        <input type="password" id="supervisor-pin-input" class="top-select" style="width:100%; padding:10px; font-size:16px; text-align:center; letter-spacing:4px;" maxlength="6" value="9942" placeholder="••••">
-      </div>
-      <div style="display:flex; gap:6px; margin-top:12px;">
-        <button class="btn-mob-action" style="flex:1; background:#dc2626; padding:9px; font-size:12px; font-weight:700;" onclick="mob.confirmSupervisorOverride()">
-          ⚠️ Authorize Override
-        </button>
-        <button class="btn-mob-action" style="background:#475569; padding:9px; font-size:12px;" onclick="mob.closeSupervisorModal()">
-          Cancel
-        </button>
+        <button class="btn-mob-action" style="background:#fee2e2; color:#b91c1c; border-color:#fecaca; padding:10px;" onclick="mob.supervisorOverrideFIFO()">Authorize Supervisor Override</button>
       </div>
     </div>
   </div>
@@ -567,17 +732,17 @@
   <div id="hu-label-modal" class="fifo-warning-modal">
     <div class="fifo-warning-box" style="text-align:left; background:#ffffff; color:#0f172a; border:2px solid #0f172a;">
       <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:6px; margin-bottom:8px;">
-        <div style="font-weight:900; font-size:15px; color:#dc2626;">HONDA HMSI • OEM PALLET LABEL</div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:700; background:#0f172a; color:#fff; padding:2px 6px; border-radius:4px;">HU LABEL</span>
+        <div style="font-weight:900; font-size:14px; color:#8b3e00;">HONDA HMSI • OEM PALLET LABEL</div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; background:#0f172a; color:#fff; padding:2px 6px; border-radius:4px;">HU LABEL</span>
       </div>
 
       <div style="font-family:'JetBrains Mono',monospace; font-size:11px; line-height:1.6;" id="hu-label-content">
         <!-- Dynamic Label Content -->
       </div>
 
-      <div style="background:#f1f5f9; border:1px dashed #64748b; border-radius:6px; padding:8px; text-align:center; margin:10px 0;">
-        <div style="font-size:24px; letter-spacing:4px; font-family:'JetBrains Mono',monospace; font-weight:900;">||||| | |||| ||| |||| | |||</div>
-        <div style="font-size:11px; font-weight:700; color:#334155;" id="hu-label-barcode-text">HU-HND-2026-009805</div>
+      <div style="background:#f8fafc; border:1px dashed #64748b; border-radius:6px; padding:8px; text-align:center; margin:10px 0;">
+        <div style="font-size:22px; letter-spacing:4px; font-family:'JetBrains Mono',monospace; font-weight:900;">||||| | |||| ||| |||| | |||</div>
+        <div style="font-size:11px; font-weight:800; color:#334155;" id="hu-label-barcode-text">HU-HND-2026-009805</div>
       </div>
 
       <div style="display:flex; gap:6px; margin-top:10px;">
@@ -587,31 +752,29 @@
     </div>
   </div>
 
-  <!-- Bottom Navigation Bar (Hidden on Login, shown dynamically when logged in as Operator) -->
+  <!-- Dynamic Mobile Toast Alert -->
+  <div id="mob-toast" class="mob-toast">
+    <span id="mob-toast-icon">ℹ️</span>
+    <span id="mob-toast-msg">Notification</span>
+  </div>
+
+  <!-- Bottom Navigation Bar Matching Image 2 (Home, Tasks, Scan, Settings) -->
   <nav class="mobile-bottom-nav" style="display:none;">
     <a class="mob-nav-item active" data-view="home" onclick="mob.showView('home')">
       <span class="icon">🏠</span>
-      <span>Home</span>
+      <span>HOME</span>
     </a>
-    <a class="mob-nav-item" data-view="gate" onclick="mob.showView('gate')">
-      <span class="icon">🚚</span>
-      <span>Gate In</span>
-    </a>
-    <a class="mob-nav-item" data-view="tasks" onclick="mob.showTasksTab('inbound')">
-      <span class="icon">📥</span>
-      <span>Inbound</span>
+    <a class="mob-nav-item" data-view="tasks" onclick="mob.showView('putaway')">
+      <span class="icon">📋</span>
+      <span>TASKS</span>
     </a>
     <a class="mob-nav-item" data-view="scan" onclick="mob.showView('scan')">
       <span class="icon">📷</span>
-      <span>Scan</span>
-    </a>
-    <a class="mob-nav-item" data-view="inventory" onclick="mob.showView('inventory')">
-      <span class="icon">📦</span>
-      <span>Stock</span>
+      <span>SCAN</span>
     </a>
     <a class="mob-nav-item" data-view="more" onclick="mob.showView('more')">
       <span class="icon">⚙️</span>
-      <span>More</span>
+      <span>SETTINGS</span>
     </a>
   </nav>
 </div>
