@@ -154,7 +154,7 @@ class MobileWMSApp {
     const pin = this.enteredPin || '1002';
 
     const users = (window.wms && window.wms.userMaster) ? window.wms.userMaster : WMS_DEFAULT_USERS;
-    
+
     // Default to Rajesh Kumar / Sanjay Verma if typing on demo numpad
     let matched = users.find(u => u.pin === pin);
     if (!matched && (pin === '1002' || pin === '7749' || pin === '1004' || pin === '1003' || pin === '1005')) {
@@ -204,7 +204,7 @@ class MobileWMSApp {
     localStorage.removeItem('HONDA_MOB_ACTIVE_ROLE');
     localStorage.removeItem('HONDA_MOB_ACTIVE_USER_ID');
     this.playBeep('normal');
-    
+
     const header = document.getElementById('mob-main-header');
     if (header) header.style.display = 'none';
 
@@ -288,7 +288,7 @@ class MobileWMSApp {
       { id: 'putaway', title: 'Putaway', sub: 'Stage to Racks', icon: '📦', iconBg: '#dcfce7', iconColor: '#15803d', count: putCount, countBg: '#bbf7d0', countColor: '#166534', view: 'putaway' },
       { id: 'stock', title: 'Stock & FIFO', sub: 'HU / Bin Lookup', icon: '🔍', iconBg: '#ede9fe', iconColor: '#6d28d9', count: 'LIVE', countBg: '#e0e7ff', countColor: '#3730a3', view: 'stock-enquiry' },
       { id: 'cycle', title: 'Cycle Count', sub: 'Blind Reconcile', icon: '📋', iconBg: '#e0f2fe', iconColor: '#0284c7', count: ccCount, countBg: '#bae6fd', countColor: '#0369a1', view: 'cycle-count' },
-      { id: 'picking', title: 'Line Picking', sub: 'Wave & FIFO', icon: '🛒', iconBg: '#fee2e2', iconColor: '#b91c1c', count: pickCount, countBg: '#fee2e2', countColor: '#991b1b', view: 'picking' }
+      { id: 'picking', title: 'Picking', sub: 'Wave & FIFO', icon: '🛒', iconBg: '#fee2e2', iconColor: '#b91c1c', count: pickCount, countBg: '#fee2e2', countColor: '#991b1b', view: 'picking' }
     ];
 
     grid.innerHTML = modules.map(m => `
@@ -311,7 +311,7 @@ class MobileWMSApp {
   quickScanASNAtGate() {
     const input = document.getElementById('mob-ge-vehicle');
     if (input) input.value = 'ASN-HND-2026-00391';
-    
+
     const supplierEl = document.getElementById('mob-ge-supplier-display');
     const poEl = document.getElementById('mob-ge-po');
     const qtyEl = document.getElementById('mob-ge-qty');
@@ -390,7 +390,7 @@ class MobileWMSApp {
     this.playBeep('success');
     this.showToast(`Gate Pass ${newGE.gateEntryNo} Created ➔ Moving to Inbound Receiving (Dock 04)`, 'success', '🚚');
     this.renderMobileGateQueue();
-    
+
     // Auto-advance directly to Receiving stage after 700ms
     setTimeout(() => {
       this.showView('receiving');
@@ -543,7 +543,7 @@ class MobileWMSApp {
 
     this.playBeep('success');
     this.showToast(`Receiving Closed • ${mrnNo} Created ➔ Advance to Putaway`, 'success', '📑');
-    
+
     // Automatically advance to Putaway view after 700ms
     setTimeout(() => {
       this.showView('putaway');
@@ -633,7 +633,7 @@ class MobileWMSApp {
 
     this.playBeep('success');
     this.showToast(`Putaway Completed! Material stored in ${scannedBin} ➔ Moving to Stock Enquiry`, 'success', '✅');
-    
+
     // Auto-advance to Stock Enquiry to view updated bin stock
     setTimeout(() => {
       this.showView('stock-enquiry');
@@ -839,22 +839,48 @@ class MobileWMSApp {
     `).join('');
   }
 
+  fillMaxPickQty(qty) {
+    const input = document.getElementById('mob-pick-qty-input');
+    if (input) input.value = qty;
+    this.playBeep('normal');
+    this.showToast(`Pick Quantity set to ${qty} EA`, 'info', '🔢');
+  }
+
+  validatePickQtyInput(el) {
+    if (!el) return;
+    const max = parseInt(el.getAttribute('max') || '80', 10);
+    const min = parseInt(el.getAttribute('min') || '1', 10);
+    let val = parseInt(el.value, 10);
+
+    if (val > max) {
+      el.value = max;
+      this.playBeep('error');
+      this.showToast(`Quantity cannot exceed maximum required ${max} EA`, 'error', '⚠️');
+    } else if (val < min && el.value !== '') {
+      el.value = min;
+    }
+  }
+
   // H7: Strict FIFO Picking
   quickFillCorrectFIFOHU() {
     const binInput = document.getElementById('mob-pick-scan-bin');
     const huInput = document.getElementById('mob-pick-scan-hu');
+    const qtyInput = document.getElementById('mob-pick-qty-input');
     if (binInput) binInput.value = 'RM-A03-R04-S02-B05';
     if (huInput) huInput.value = 'HU-HND-2026-009801';
+    if (qtyInput) qtyInput.value = '80';
     this.playBeep('normal');
-    this.showToast('Oldest FIFO Lot (Priority #1) Barcode Scanned', 'info', '✅');
+    this.showToast('Oldest FIFO Lot (Priority #1) Barcode Scanned • Qty: 80 EA', 'info', '✅');
   }
 
   quickTestNonFIFOHU() {
     const binInput = document.getElementById('mob-pick-scan-bin');
     const huInput = document.getElementById('mob-pick-scan-hu');
+    const qtyInput = document.getElementById('mob-pick-qty-input');
     if (binInput) binInput.value = 'RM-A03-R04-S02-B05';
     if (huInput) huInput.value = 'HU-HND-2026-009805';
-    
+    if (qtyInput) qtyInput.value = '80';
+
     // Trigger FIFO warning
     this.playBeep('error');
     this.showFIFOException(
@@ -878,9 +904,11 @@ class MobileWMSApp {
   confirmFIFOPick() {
     const binInput = document.getElementById('mob-pick-scan-bin');
     const huInput = document.getElementById('mob-pick-scan-hu');
+    const qtyInput = document.getElementById('mob-pick-qty-input');
 
     const bin = binInput?.value.trim();
     const hu = huInput?.value.trim();
+    let qty = parseInt(qtyInput?.value || '80', 10);
 
     if (!bin || !hu) {
       this.playBeep('error');
@@ -888,19 +916,34 @@ class MobileWMSApp {
       return;
     }
 
+    if (!qty || qty <= 0) {
+      this.playBeep('error');
+      this.showToast('Enter valid pick quantity', 'error', '⚠️');
+      return;
+    }
+
+    if (qty > 80) {
+      if (qtyInput) qtyInput.value = '80';
+      this.playBeep('error');
+      this.showToast('Error: Pick quantity cannot exceed requested 80 EA', 'error', '⛔');
+      return;
+    }
+
     // Update Pick List status
     if (window.wms.pickLists && window.wms.pickLists.length) {
       window.wms.pickLists[0].status = 'Picked & Staged';
+      window.wms.pickLists[0].pickedQty = qty;
     }
 
     // Clear picking form fields
     if (binInput) binInput.value = '';
     if (huInput) huInput.value = '';
+    if (qtyInput) qtyInput.value = '80';
 
     saveWMSState(window.wms);
     this.playBeep('success');
-    this.showToast(`Pick Success: ${hu} staged at Lineside STG-P1-L1 ➔ Advance to Issue to Line`, 'success', '🛒');
-    
+    this.showToast(`Pick Success: ${qty} EA of ${hu} staged at Lineside STG-P1-L1 ➔ Advance to Issue to Line`, 'success', '🛒');
+
     // Auto-advance to Issue to Line stage after 700ms
     setTimeout(() => {
       this.showView('issue-line');
@@ -1234,7 +1277,7 @@ class MobileWMSApp {
         osc.start();
         osc.stop(ctx.currentTime + 0.25);
       }
-    } catch (e) {}
+    } catch (e) { }
   }
 
   showToast(msg, type = 'success', icon = '✅') {

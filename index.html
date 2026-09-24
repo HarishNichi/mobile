@@ -498,6 +498,16 @@
             <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">2. Scan HU / LPN Barcode</label>
             <input type="text" id="mob-pick-scan-hu" class="top-select" style="width:100%; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace; margin-top:2px;" placeholder="Scan HU barcode...">
           </div>
+          <div>
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">3. Pick Quantity (EA)</label>
+              <span style="font-size:9.5px; color:#0284c7; font-weight:700;">Req: 80 EA</span>
+            </div>
+            <div style="display:flex; gap:6px; margin-top:2px;">
+              <input type="number" id="mob-pick-qty-input" class="top-select" style="flex:1; padding:8px; font-size:13px; font-weight:800; font-family:'JetBrains Mono',monospace;" value="80" min="1" max="80" oninput="mob.validatePickQtyInput(this)">
+              <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; background:#f1f5f9; color:#0f172a; font-weight:800;" onclick="mob.fillMaxPickQty(80)">Max (80)</button>
+            </div>
+          </div>
           <div style="display:grid; grid-template-columns:1fr 1fr; gap:6px;">
             <button class="btn-mob-action" style="padding:6px; font-size:11px; background:#dcfce7; color:#15803d; border-color:#bbf7d0;" onclick="mob.quickFillCorrectFIFOHU()">Auto Scan FIFO HU</button>
             <button class="btn-mob-action" style="padding:6px; font-size:11px; background:#fee2e2; color:#b91c1c; border-color:#fecaca;" onclick="mob.quickTestNonFIFOHU()">Test Non-FIFO HU</button>
