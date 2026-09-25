@@ -33,7 +33,7 @@
   </div>
 
   <!-- Mobile App Header (Shown when logged in) -->
-  <header class="mobile-app-header" id="mob-main-header" style="display:none;">
+  <header class="mobile-app-header" id="mob-main-header" style="display:none; justify-content:space-between; align-items:center;">
     <div style="display:flex; align-items:center; gap:10px;">
       <div id="mob-header-avatar" style="width:36px; height:36px; border-radius:8px; background:#8b3e00; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px;">
         RK
@@ -48,9 +48,16 @@
         </div>
       </div>
     </div>
-    <button class="mob-view-toggle-btn" style="background:#e0e7ff; border-color:#c7d2fe; color:#3730a3; font-weight:800; display:flex; align-items:center; gap:4px;" onclick="mob.logout()">
-      ⇄ SWITCH
-    </button>
+    <div style="display:flex; align-items:center; gap:6px;">
+      <!-- Bell Notification Icon: Opens Assigned Priority Tasks -->
+      <button class="mob-view-toggle-btn" style="background:#fef3c7; border-color:#fde68a; color:#92400e; font-size:14px; padding:6px 8px; position:relative; cursor:pointer;" onclick="mob.showView('tasks')" title="Assigned Priority Tasks">
+        🔔
+        <span style="position:absolute; top:-3px; right:-3px; background:#ef4444; color:#fff; font-size:9px; font-weight:900; border-radius:50%; width:14px; height:14px; display:flex; align-items:center; justify-content:center;">1</span>
+      </button>
+      <button class="mob-view-toggle-btn" style="background:#e0e7ff; border-color:#c7d2fe; color:#3730a3; font-weight:800; display:flex; align-items:center; gap:4px;" onclick="mob.logout()">
+        ⇄ SWITCH
+      </button>
+    </div>
   </header>
 
   <!-- Mobile Scrollable Body Area -->
@@ -128,36 +135,9 @@
       </div>
     </section>
 
-    <!-- 1. HOME VIEW (Exact Match with Image 2: Hero Putaway Task + 7 Operational Module Tiles) -->
+    <!-- 1. HOME VIEW (Clean 7 Operational Modules Only) -->
     <section id="mob-view-home" class="mobile-view">
       
-      <!-- Top Priority Hero Banner (LOC-B04-R02 Main Stand Comp) -->
-      <div class="mob-hero-task-card">
-        <div class="hero-header">
-          <div class="hero-tags">
-            <span class="mob-hero-tag-priority">PRIORITY</span>
-            <span class="mob-hero-tag-action">PUTAWAY</span>
-          </div>
-          <span style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:800; color:#94a3b8;">#50530-K04</span>
-        </div>
-
-        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:4px;">
-          <div>
-            <div style="font-size:10.5px; color:#cbd5e1; font-weight:700;">BIN:</div>
-            <div class="hero-bin" id="hero-task-bin">LOC-B04-R02</div>
-          </div>
-          <span style="font-size:10px; font-weight:900; background:#0f172a; color:#38bdf8; padding:3px 8px; border-radius:4px; letter-spacing:0.5px;">BAY AISLE 4</span>
-        </div>
-
-        <div class="hero-desc">
-          <span>📦</span> <span id="hero-task-item">Main Stand Comp (50 PCS)</span>
-        </div>
-
-        <button class="mob-hero-start-btn" onclick="mob.showView('putaway')">
-          <span>▶</span> START TASK
-        </button>
-      </div>
-
       <!-- Operational Modules Header -->
       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
         <div style="display:flex; align-items:center; gap:6px;">
@@ -167,12 +147,12 @@
         <span style="font-size:10px; font-weight:800; color:#64748b;">Quick Access</span>
       </div>
 
-      <!-- Grid of Light-Themed Operational Modules (Matching Image 2) -->
+      <!-- Grid of Light-Themed Operational Modules -->
       <div class="mob-tasks-grid" id="mob-home-tiles-grid">
         <!-- Dynamic module tiles rendered by JS -->
       </div>
 
-      <!-- Label Reprint Full Width Banner Tile (Matching Image 2) -->
+      <!-- Label Reprint Full Width Banner Tile (7th Active Module) -->
       <div class="mob-task-tile" style="display:flex; justify-content:space-between; align-items:center; padding:12px;" onclick="mob.showView('reprint')">
         <div style="display:flex; align-items:center; gap:10px;">
           <div class="mob-tile-icon-box" style="background:#dcfce7; color:#15803d;">
@@ -186,6 +166,53 @@
         <span style="font-size:10px; font-weight:900; background:#86efac; color:#14532d; padding:3px 8px; border-radius:12px; display:flex; align-items:center; gap:4px;">
           <span>●</span> Ready
         </span>
+      </div>
+    </section>
+
+    <!-- ASSIGNED PRIORITY TASKS VIEW (Opened via Header Bell Icon or Tasks Bottom Nav) -->
+    <section id="mob-view-tasks" class="mobile-view">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <h4 style="font-size:14px; font-weight:900; color:#0f172a; margin:0;">🔔 Assigned Priority Tasks</h4>
+        <button class="btn-mob-action" style="font-size:10.5px; padding:4px 8px;" onclick="mob.showView('home')">← Back to Home</button>
+      </div>
+
+      <!-- Priority Task Hero Card -->
+      <div class="mob-hero-task-card">
+        <div class="hero-header">
+          <div class="hero-tags">
+            <span class="mob-hero-tag-priority">PRIORITY</span>
+            <span class="mob-hero-tag-action">PUTAWAY</span>
+          </div>
+          <span style="font-size:11px; font-family:'JetBrains Mono',monospace; font-weight:800; color:#94a3b8;">#50530-K04</span>
+        </div>
+
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:4px;">
+          <div>
+            <div style="font-size:10.5px; color:#cbd5e1; font-weight:700;">TARGET BIN:</div>
+            <div class="hero-bin" id="hero-task-bin">LOC-B04-R02</div>
+          </div>
+          <span style="font-size:10px; font-weight:900; background:#0f172a; color:#38bdf8; padding:3px 8px; border-radius:4px; letter-spacing:0.5px;">BAY AISLE 4</span>
+        </div>
+
+        <div class="hero-desc">
+          <span>📦</span> <span id="hero-task-item">Main Stand Comp (50 PCS)</span>
+        </div>
+
+        <button class="mob-hero-start-btn" onclick="mob.showView('putaway')">
+          <span>▶</span> EXECUTE PUTAWAY TASK
+        </button>
+      </div>
+
+      <div style="font-size:11.5px; font-weight:900; color:#0f172a; margin:14px 0 8px 0;">ADDITIONAL ASSIGNED TASKS</div>
+      <div class="mob-task-card" style="border-left:3px solid #0284c7; margin-bottom:8px;" onclick="mob.showView('picking')">
+        <div class="mob-task-card-header">
+          <strong style="color:#0f172a; font-size:12px;">PL-HND-2026-00129</strong>
+          <span class="wms-badge" style="background:#eff6ff; color:#1d4ed8;">In Picking</span>
+        </div>
+        <div style="font-size:11px; color:#334155; line-height:1.5;">
+          <div>Material: <strong>HND-THROT-KEIHIN (80 EA)</strong></div>
+          <div>Destination: <strong>Line 1 (Activa 6G Staging)</strong></div>
+        </div>
       </div>
     </section>
 
@@ -698,9 +725,6 @@
           <div>Active Plant: <strong>Plant 04 Narasapura (Scooter Division)</strong></div>
           <div>Assigned Warehouse: <strong>RM-WH-01 (Powertrain & Chassis)</strong></div>
         </div>
-        <button class="btn-giant-scan" style="margin-top:16px; padding:10px;" onclick="window.open('../web/index.html', '_blank')">
-          🖥️ Open Desktop WMS Console
-        </button>
       </div>
     </section>
 
@@ -755,7 +779,7 @@
       <span class="icon">🏠</span>
       <span>HOME</span>
     </a>
-    <a class="mob-nav-item" data-view="tasks" onclick="mob.showView('putaway')">
+    <a class="mob-nav-item" data-view="tasks" onclick="mob.showView('tasks')">
       <span class="icon">📋</span>
       <span>TASKS</span>
     </a>
