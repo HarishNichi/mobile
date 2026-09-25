@@ -466,6 +466,18 @@ class MobileWMSApp {
     }
 
     this.checkReceivingTolerance();
+    this.updateBoxesBreakdown();
+  }
+
+  updateBoxesBreakdown() {
+    const goodQty = parseInt(document.getElementById('mob-rec-good-qty')?.value || '480', 10);
+    const boxInput = document.getElementById('mob-rec-boxes-qty');
+    const boxTxt = document.getElementById('mob-rec-qty-per-box-txt');
+    let numBoxes = parseInt(boxInput?.value || '1', 10);
+    if (!numBoxes || numBoxes <= 0) numBoxes = 1;
+
+    const avg = Math.round(goodQty / numBoxes);
+    if (boxTxt) boxTxt.textContent = `${avg} EA / Box (${numBoxes} Boxes)`;
   }
 
   triggerScanReceivingMat() {
@@ -493,6 +505,7 @@ class MobileWMSApp {
     if (total > expTotal * 1.05) {
       this.showToast('⚠️ Warning: Quantity exceeds +5% tolerance! Supervisor approval required.', 'error', '⚠️');
     }
+    this.updateBoxesBreakdown();
   }
 
   captureReceivingPhoto() {
@@ -503,8 +516,34 @@ class MobileWMSApp {
   }
 
   printNearestPalletLabel() {
-    const newHU = `HU-HND-2026-${Math.floor(100000 + Math.random() * 900000)}`;
-    this.showHULabelPreview(newHU, 'HND-THROT-KEIHIN', 'Keihin Throttle Body Sub-Assy', 480, 'Keihin India Pvt Ltd', 'MRN-PENDING');
+    const goodQty = parseInt(document.getElementById('mob-rec-good-qty')?.value || '480', 10);
+    const numBoxes = parseInt(document.getElementById('mob-rec-boxes-qty')?.value || '4', 10);
+    const matNameEl = document.getElementById('mob-rec-mat-name')?.textContent || 'HND-THROT-KEIHIN';
+    const matCode = matNameEl.split(' ')[0] || 'HND-THROT-KEIHIN';
+    const lotNo = document.getElementById('mob-rec-lot')?.textContent || 'BAT-KEI-2026-09-25-01';
+
+    // Generate individual HU labels for each box
+    this.activeBoxesList = [];
+    const baseQty = Math.floor(goodQty / numBoxes);
+    const remainder = goodQty % numBoxes;
+
+    for (let i = 1; i <= numBoxes; i++) {
+      const boxQty = i === numBoxes ? baseQty + remainder : baseQty;
+      this.activeBoxesList.push({
+        boxIndex: i,
+        totalBoxes: numBoxes,
+        huNumber: `HU-HND-2026-${Math.floor(100000 + Math.random() * 900000)}`,
+        partNo: matCode,
+        partDesc: matNameEl,
+        qty: boxQty,
+        lotNo,
+        supplier: 'Keihin India Electronics Pvt Ltd',
+        grn: 'MRN-PENDING'
+      });
+    }
+
+    this.currentBoxIndex = 0;
+    this.renderHULabelBoxCarousel();
   }
 
   submitCloseReceivingMRN() {
@@ -1208,30 +1247,76 @@ class MobileWMSApp {
     if (modal) modal.classList.add('active');
   }
 
-  showHULabelPreview(huNumber, partNo, partDesc, qty, supplier, grn) {
-    const content = document.getElementById('hu-label-content');
-    const barcodeText = document.getElementById('hu-label-barcode-text');
-    if (barcodeText) barcodeText.textContent = huNumber;
+  renderHULabelBoxCarousel() {
+    if (!this.activeBoxesList || !this.activeBoxesList.length) return;
+    const totalBoxes = this.activeBoxesList.length;
 
-    if (content) {
-      content.innerHTML = `
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span><strong>PART NO:</strong> ${partNo}</span>
-          <span><strong>QTY:</strong> ${qty} EA</span>
+    const indEl = document.getElementById('hu-label-box-indicator');
+    if (indEl) indEl.textContent = `All ${totalBoxes} Boxes • Scroll down to review`;
+
+    const container = document.getElementById('hu-labels-scroll-container');
+    if (container) {
+      container.innerHTML = this.activeBoxesList.map(box => `
+        <div style="background:#ffffff; border:1.5px solid #cbd5e1; border-radius:8px; padding:10px; box-shadow:0 1px 3px rgba(0,0,0,0.05);">
+          <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px dashed #cbd5e1; padding-bottom:4px; margin-bottom:6px;">
+            <strong style="color:#0f172a; font-size:12px;">📦 BOX ${box.boxIndex} OF ${box.totalBoxes}</strong>
+            <span style="font-size:10px; font-weight:800; background:#dcfce7; color:#15803d; padding:2px 6px; border-radius:4px;">${box.qty} EA</span>
+          </div>
+          
+          <div style="font-family:'JetBrains Mono',monospace; font-size:10.5px; line-height:1.6; color:#334155;">
+            <div style="display:flex; justify-content:space-between;">
+              <span><strong>PART NO:</strong> ${box.partNo}</span>
+              <span><strong>QTY:</strong> ${box.qty} EA</span>
+            </div>
+            <div><strong>DESC:</strong> ${box.partDesc}</div>
+            <div style="display:flex; justify-content:space-between;">
+              <span><strong>LOT NO:</strong> ${box.lotNo}</span>
+              <span><strong>VENDOR:</strong> ${box.supplier}</span>
+            </div>
+            <div style="display:flex; justify-content:space-between;">
+              <span><strong>PLANT:</strong> HMSI Narsapur P1</span>
+              <span><strong>DATE:</strong> ${new Date().toLocaleDateString()}</span>
+            </div>
+          </div>
+
+          <div style="background:#f8fafc; border:1px dashed #94a3b8; border-radius:6px; padding:6px; text-align:center; margin-top:6px;">
+            <div style="font-size:18px; letter-spacing:3px; font-family:'JetBrains Mono',monospace; font-weight:900; color:#0f172a;">||||| | |||| ||| |||| | |||</div>
+            <div style="font-size:10.5px; font-weight:800; color:#0284c7; font-family:'JetBrains Mono',monospace;">${box.huNumber}</div>
+          </div>
         </div>
-        <div style="margin-bottom:4px;"><strong>DESC:</strong> ${partDesc}</div>
-        <div style="display:flex; justify-content:space-between; margin-bottom:4px;">
-          <span><strong>VENDOR:</strong> ${supplier}</span>
-          <span><strong>GRN/MRN:</strong> ${grn}</span>
-        </div>
-        <div style="display:flex; justify-content:space-between;">
-          <span><strong>PLANT:</strong> HMSI Narsapur P1</span>
-          <span><strong>DATE:</strong> ${new Date().toLocaleDateString()}</span>
-        </div>
-      `;
+      `).join('');
     }
+
     const modal = document.getElementById('hu-label-modal');
     if (modal) modal.classList.add('active');
+  }
+
+  printSingleBoxAlert(huNumber, boxIdx) {
+    this.playBeep('success');
+    this.showToast(`Label for Box ${boxIdx} (${huNumber}) sent to Zebra ZT411`, 'success', '🖨️');
+  }
+
+  printAllHULabelsAlert() {
+    const total = this.activeBoxesList?.length || 1;
+    this.playBeep('success');
+    this.showToast(`Batch Print Sent: All ${total} Box Labels generated on Zebra ZT411`, 'success', '🖨️');
+    this.closeHULabelModal();
+  }
+
+  showHULabelPreview(huNumber, partNo, partDesc, qty, supplier, grn) {
+    this.activeBoxesList = [{
+      boxIndex: 1,
+      totalBoxes: 1,
+      huNumber,
+      partNo,
+      partDesc,
+      qty,
+      lotNo: 'BAT-KEI-2026-09-25-01',
+      supplier,
+      grn
+    }];
+    this.currentBoxIndex = 0;
+    this.renderHULabelBoxCarousel();
   }
 
   closeHULabelModal() {

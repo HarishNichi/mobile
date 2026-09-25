@@ -58,39 +58,6 @@
     
     <!-- 0. LOGIN SCREEN (Exact Match with Image 1: Industrial Wedge, Shift selection, Keypad Numpad) -->
     <section id="mob-view-login" class="mobile-view active">
-      
-      <!-- Scan Engine Ready Banner -->
-      <div class="mob-scanner-banner">
-        <div class="mob-scanner-banner-left">
-          <div class="mob-scanner-icon">📟</div>
-          <div>
-            <strong>SCAN ENGINE READY</strong>
-            <div>Aim terminal laser or key badge...</div>
-          </div>
-        </div>
-        <span class="mob-wedge-pill">WEDGE ACTIVE</span>
-      </div>
-
-      <!-- Active Shift Selection -->
-      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-        <span style="font-size:10.5px; font-weight:900; color:#475569; letter-spacing:0.5px;">ACTIVE SHIFT SELECTION</span>
-        <span style="font-size:10px; font-weight:800; color:#8b3e00;">AUTO-SYNCED</span>
-      </div>
-
-      <div class="mob-shift-grid">
-        <div class="mob-shift-btn active" onclick="mob.selectShift('A', this)">
-          <div class="shift-name">SHIFT A</div>
-          <div class="shift-time">06:00 - 14:30</div>
-        </div>
-        <div class="mob-shift-btn" onclick="mob.selectShift('B', this)">
-          <div class="shift-name">SHIFT B</div>
-          <div class="shift-time">14:30 - 23:00</div>
-        </div>
-        <div class="mob-shift-btn" onclick="mob.selectShift('C', this)">
-          <div class="shift-name">SHIFT C</div>
-          <div class="shift-time">23:00 - 06:00</div>
-        </div>
-      </div>
 
       <!-- Operator / Badge Card -->
       <div style="background:#ffffff; border:1px solid #e2e8f0; border-radius:12px; padding:12px; margin-bottom:10px; box-shadow:0 1px 3px rgba(15,23,42,0.04);">
@@ -320,6 +287,17 @@
           <div>
             <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Damaged / Short Qty</label>
             <input type="number" id="mob-rec-bad-qty" class="top-select" style="width:100%; padding:8px; font-size:13px; font-weight:800; margin-top:3px; color:#b91c1c;" value="20" oninput="mob.checkReceivingTolerance()">
+          </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-bottom:10px; background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px; padding:8px;">
+          <div>
+            <label style="font-size:10px; color:#0369a1; font-weight:800; text-transform:uppercase;">📦 Number of Boxes / HUs</label>
+            <input type="number" id="mob-rec-boxes-qty" class="top-select" style="width:100%; padding:7px; font-size:12px; font-weight:800; margin-top:2px;" value="4" min="1" max="50" oninput="mob.updateBoxesBreakdown()">
+          </div>
+          <div style="display:flex; flex-direction:column; justify-content:center;">
+            <div style="font-size:9.5px; color:#0284c7; font-weight:700;">QTY PER BOX (AVG):</div>
+            <div style="font-size:13px; font-weight:900; color:#0369a1; font-family:'JetBrains Mono',monospace;" id="mob-rec-qty-per-box-txt">120 EA / Box</div>
           </div>
         </div>
 
@@ -740,26 +718,27 @@
     </div>
   </div>
 
-  <!-- Handling Unit (HU) Label Barcode Sticker Modal -->
+  <!-- Handling Unit (HU) Label Barcode Sticker Modal (Scrollable Multi-Box Batch List) -->
   <div id="hu-label-modal" class="fifo-warning-modal">
-    <div class="fifo-warning-box" style="text-align:left; background:#ffffff; color:#0f172a; border:2px solid #0f172a;">
-      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:6px; margin-bottom:8px;">
-        <div style="font-weight:900; font-size:14px; color:#8b3e00;">HONDA HMSI • OEM PALLET LABEL</div>
-        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; background:#0f172a; color:#fff; padding:2px 6px; border-radius:4px;">HU LABEL</span>
+    <div class="fifo-warning-box" style="text-align:left; background:#ffffff; color:#0f172a; border:2px solid #0f172a; max-height:85vh; display:flex; flex-direction:column; padding:14px;">
+      <!-- Fixed Header -->
+      <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:2px solid #0f172a; padding-bottom:6px; margin-bottom:8px; flex-shrink:0;">
+        <div>
+          <div style="font-weight:900; font-size:13px; color:#8b3e00;">HONDA HMSI • BOX LABELS PREVIEW</div>
+          <div style="font-size:10px; color:#64748b;" id="hu-label-box-indicator">Total 4 Boxes • Scrollable Preview</div>
+        </div>
+        <span style="font-family:'JetBrains Mono',monospace; font-size:10px; font-weight:700; background:#0f172a; color:#fff; padding:2px 6px; border-radius:4px;">BATCH ZPL</span>
       </div>
 
-      <div style="font-family:'JetBrains Mono',monospace; font-size:11px; line-height:1.6;" id="hu-label-content">
-        <!-- Dynamic Label Content -->
+      <!-- Scrollable Container for All Labels -->
+      <div id="hu-labels-scroll-container" style="flex:1; overflow-y:auto; padding-right:4px; display:flex; flex-direction:column; gap:12px;">
+        <!-- All box labels rendered here -->
       </div>
 
-      <div style="background:#f8fafc; border:1px dashed #64748b; border-radius:6px; padding:8px; text-align:center; margin:10px 0;">
-        <div style="font-size:22px; letter-spacing:4px; font-family:'JetBrains Mono',monospace; font-weight:900;">||||| | |||| ||| |||| | |||</div>
-        <div style="font-size:11px; font-weight:800; color:#334155;" id="hu-label-barcode-text">HU-HND-2026-009805</div>
-      </div>
-
-      <div style="display:flex; gap:6px; margin-top:10px;">
-        <button class="btn-mob-action" style="flex:1; background:#10b981; color:#fff; font-weight:700; padding:9px;" onclick="mob.printHULabelAlert()">🖨️ Zebra Print (ZPL)</button>
-        <button class="btn-mob-action" style="background:#64748b; color:#fff; padding:9px;" onclick="mob.closeHULabelModal()">Close</button>
+      <!-- Sticky Print Action Bar -->
+      <div style="display:flex; gap:6px; margin-top:10px; padding-top:8px; border-top:1px solid #e2e8f0; flex-shrink:0;">
+        <button class="btn-mob-action" style="flex:1; background:#10b981; color:#fff; font-weight:800; padding:10px; font-size:12px;" onclick="mob.printAllHULabelsAlert()">🖨️ Print All Labels (ZPL)</button>
+        <button class="btn-mob-action" style="background:#64748b; color:#fff; padding:10px; font-size:12px;" onclick="mob.closeHULabelModal()">Close</button>
       </div>
     </div>
   </div>
