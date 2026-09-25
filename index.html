@@ -285,13 +285,15 @@
 
         <div style="margin-bottom:10px;">
           <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Select / Scan Inbound ASN</label>
-          <div style="display:flex; gap:6px; margin-top:3px;">
-            <select id="mob-rec-asn-select" class="top-select" style="flex:1; padding:8px; font-size:11px;" onchange="mob.onReceivingASNChange()">
-              <option value="ASN-HND-2026-00391">ASN-00391 | Keihin (500 EA Throttle Body) - PO-421</option>
-              <option value="ASN-HND-2026-00393">ASN-00393 | Keihin (600 EA Throttle Body) - PO-421</option>
+          <div style="display:flex; gap:6px; margin-top:3px; align-items:stretch;">
+            <select id="mob-rec-asn-select" class="top-select" style="flex:1; min-width:0; padding:8px; font-size:11px;" onchange="mob.onReceivingASNChange()">
+              <option value="ASN-HND-2026-00391">ASN-00391 | Keihin (500 EA Throttle) - PO-421</option>
+              <option value="ASN-HND-2026-00600-10">ASN-00600 #10 | Keihin (400 EA ECU OBD2) - PO-600</option>
+              <option value="ASN-HND-2026-00600-20">ASN-00600 #20 | Keihin (500 EA Bando V-Belt) - PO-600</option>
+              <option value="ASN-HND-2026-00600-30">ASN-00600 #30 | Keihin (600 EA Throttle Body) - PO-600</option>
               <option value="ASN-HND-2026-00394">ASN-00394 | Showa (400 SET Shocks) - PO-425</option>
             </select>
-            <button class="btn-mob-action" style="padding:4px 8px; font-size:11px;" onclick="mob.triggerScanReceivingMat()">📷 Scan</button>
+            <button class="btn-mob-action" style="padding:0 10px; font-size:11px; white-space:nowrap; flex-shrink:0; display:flex; align-items:center; gap:4px;" onclick="mob.triggerScanReceivingMat()">📷 Scan</button>
           </div>
         </div>
 

@@ -430,28 +430,55 @@ class MobileWMSApp {
     const matName = document.getElementById('mob-rec-mat-name');
     const expQty = document.getElementById('mob-rec-expected-qty');
     const lotEl = document.getElementById('mob-rec-lot');
+    const goodInput = document.getElementById('mob-rec-good-qty');
+    const badInput = document.getElementById('mob-rec-bad-qty');
 
-    if (asn === 'ASN-HND-2026-00394') {
+    if (asn === 'ASN-HND-2026-00600-10') {
+      if (matName) matName.textContent = 'HND-ECU-KEIHIN-01 (Keihin ECU OBD2 - PO-600 #10)';
+      if (expQty) expQty.textContent = '400 EA (Tolerance ±5%)';
+      if (lotEl) lotEl.textContent = 'BAT-KEI-2026-09-25-01';
+      if (goodInput) goodInput.value = '400';
+      if (badInput) badInput.value = '0';
+    } else if (asn === 'ASN-HND-2026-00600-20') {
+      if (matName) matName.textContent = 'HND-CVT-BELT-BND (Bando V-Belt Drive - PO-600 #20)';
+      if (expQty) expQty.textContent = '500 EA (Tolerance ±5%)';
+      if (lotEl) lotEl.textContent = 'BAT-BND-2026-09-26-01';
+      if (goodInput) goodInput.value = '490';
+      if (badInput) badInput.value = '10';
+    } else if (asn === 'ASN-HND-2026-00600-30') {
+      if (matName) matName.textContent = 'HND-THROT-KEIHIN (Keihin Throttle Body - PO-600 #30)';
+      if (expQty) expQty.textContent = '600 EA (Tolerance ±5%)';
+      if (lotEl) lotEl.textContent = 'BAT-KEI-2026-09-25-02';
+      if (goodInput) goodInput.value = '300';
+      if (badInput) badInput.value = '0';
+    } else if (asn === 'ASN-HND-2026-00394') {
       if (matName) matName.textContent = 'HND-SHK-SHOWA (Telescopic Suspension)';
       if (expQty) expQty.textContent = '400 SET (Tolerance ±5%)';
       if (lotEl) lotEl.textContent = 'BAT-SHW-2026-09-22-04';
+      if (goodInput) goodInput.value = '390';
+      if (badInput) badInput.value = '10';
     } else {
       if (matName) matName.textContent = 'HND-THROT-KEIHIN (26mm Throttle Body)';
       if (expQty) expQty.textContent = '500 EA (Tolerance ±5%)';
       if (lotEl) lotEl.textContent = 'BAT-KEI-2026-09-23-01';
+      if (goodInput) goodInput.value = '480';
+      if (badInput) badInput.value = '20';
     }
+
+    this.checkReceivingTolerance();
   }
 
   triggerScanReceivingMat() {
     this.playBeep('normal');
-    this.showToast('Supplier Barcode Scanned: Keihin Throttle Verified', 'info', '📷');
+    this.showToast('Supplier Multi-Part Barcode Verified', 'info', '📷');
   }
 
   checkReceivingTolerance() {
     const goodQty = parseInt(document.getElementById('mob-rec-good-qty')?.value || '0', 10);
     const badQty = parseInt(document.getElementById('mob-rec-bad-qty')?.value || '0', 10);
     const total = goodQty + badQty;
-    const expTotal = 500;
+    const expText = document.getElementById('mob-rec-expected-qty')?.textContent || '500';
+    const expTotal = parseInt(expText.match(/\d+/)?.[0] || '500', 10);
 
     const reasonBox = document.getElementById('mob-rec-reason-box');
     if (reasonBox) reasonBox.style.display = badQty > 0 ? 'block' : 'none';

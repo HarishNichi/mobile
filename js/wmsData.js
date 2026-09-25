@@ -2,7 +2,7 @@
 // Enterprise Data Model, FIFO Allocation Engine, CRUD & LocalStorage State Management
 // Narsapur Two-Wheeler Manufacturing Plant 1 & Plant 2
 
-const WMS_STORAGE_KEY = 'HONDA_HMSI_WMS_STATE_V4';
+const WMS_STORAGE_KEY = 'HONDA_HMSI_WMS_STATE_V5';
 
 const WMS_DEFAULT_STATE = {
   activePlant: 'All',
@@ -597,6 +597,57 @@ const WMS_DEFAULT_STATE = {
       openQty: 1200,
       uom: 'EA',
       unitPrice: 1150.00
+    },
+    {
+      poNumber: 'PO-HND-2026-00600',
+      poLineItem: 10,
+      supplier: 'Keihin India Electronics Pvt Ltd',
+      plant: 'HMSI Narsapur Plant 1',
+      orderDate: '22-Sep-2026',
+      expectedReceiptDate: '25-Sep-2026',
+      status: 'Open',
+      materialCode: 'HND-ECU-KEIHIN-01',
+      materialDescription: 'Keihin Master Engine Control Unit (ECU) OBD2',
+      orderedQty: 400,
+      asnQty: 0,
+      receivedQty: 0,
+      openQty: 400,
+      uom: 'EA',
+      unitPrice: 4200.00
+    },
+    {
+      poNumber: 'PO-HND-2026-00600',
+      poLineItem: 20,
+      supplier: 'Keihin India Electronics Pvt Ltd',
+      plant: 'HMSI Narsapur Plant 1',
+      orderDate: '22-Sep-2026',
+      expectedReceiptDate: '26-Sep-2026',
+      status: 'Open',
+      materialCode: 'HND-CVT-BELT-BND',
+      materialDescription: 'Bando Double-Cog Reinforced V-Belt Drive',
+      orderedQty: 500,
+      asnQty: 0,
+      receivedQty: 0,
+      openQty: 500,
+      uom: 'EA',
+      unitPrice: 620.00
+    },
+    {
+      poNumber: 'PO-HND-2026-00600',
+      poLineItem: 30,
+      supplier: 'Keihin India Electronics Pvt Ltd',
+      plant: 'HMSI Narsapur Plant 1',
+      orderDate: '22-Sep-2026',
+      expectedReceiptDate: '25-Sep-2026',
+      status: 'Partially received',
+      materialCode: 'HND-THROT-KEIHIN',
+      materialDescription: 'Keihin PGM-FI 26mm Throttle Body Assembly',
+      orderedQty: 600,
+      asnQty: 300,
+      receivedQty: 300,
+      openQty: 300,
+      uom: 'EA',
+      unitPrice: 2450.00
     }
   ],
 
