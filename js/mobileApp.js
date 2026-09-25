@@ -635,11 +635,25 @@ class MobileWMSApp {
     }
   }
 
+  quickScanPutawayHU() {
+    const val = document.getElementById('mob-put-task-select')?.value;
+    const task = (window.wms.putawayTasks || []).find(t => t.taskId === val);
+    let huNumber = task?.huNumber;
+    if (!huNumber) {
+      huNumber = (val === 'PUT-HND-003') ? 'HU-HND-2026-009809' : 'HU-HND-2026-009803';
+    }
+    const input = document.getElementById('mob-put-hu-scan-input');
+    if (input) input.value = huNumber;
+    this.playBeep('normal');
+    this.showToast(`HU Scanned: ${huNumber}`, 'info', '🏷️');
+  }
+
   quickFillCorrectPutawayBin() {
-    const suggested = document.getElementById('mob-put-suggested-bin-txt')?.textContent.trim() || 'RM-A03-R04-S02-B05';
+    const suggested = document.getElementById('mob-put-suggested-bin-txt')?.textContent.trim() || 'RM-D01-R01-S01-B01';
     const input = document.getElementById('mob-put-bin-scan-input');
     if (input) input.value = suggested;
     this.playBeep('normal');
+    this.showToast(`Bin Scanned: ${suggested}`, 'info', '📍');
   }
 
   triggerBinFullSuggestion() {
@@ -665,8 +679,15 @@ class MobileWMSApp {
   }
 
   confirmPutawayExecution() {
+    const scannedHU = document.getElementById('mob-put-hu-scan-input')?.value.trim();
     const scannedBin = document.getElementById('mob-put-bin-scan-input')?.value.trim();
     const suggestedBin = document.getElementById('mob-put-suggested-bin-txt')?.textContent.trim();
+
+    if (!scannedHU) {
+      this.playBeep('error');
+      this.showToast('Scan HU label barcode before confirming putaway', 'error', '⚠️');
+      return;
+    }
 
     if (!scannedBin) {
       this.playBeep('error');
@@ -681,10 +702,12 @@ class MobileWMSApp {
     }
 
     // Update putaway task status and HU location
-    const openTask = (window.wms.putawayTasks || []).find(t => t.status === 'Open');
-    if (openTask) {
-      openTask.status = 'Completed';
-      const hu = (window.wms.handlingUnits || []).find(h => h.huNumber === openTask.huNumber);
+    const selectedTaskId = document.getElementById('mob-put-task-select')?.value;
+    const currentTask = (window.wms.putawayTasks || []).find(t => t.taskId === selectedTaskId) ||
+                        (window.wms.putawayTasks || []).find(t => t.status === 'Open');
+    if (currentTask) {
+      currentTask.status = 'Completed';
+      const hu = (window.wms.handlingUnits || []).find(h => h.huNumber === currentTask.huNumber || h.huNumber.includes(scannedHU) || scannedHU.includes(h.huNumber));
       if (hu) {
         hu.location = scannedBin;
         hu.status = 'AVAILABLE';
@@ -693,9 +716,11 @@ class MobileWMSApp {
 
     saveWMSState(window.wms);
 
-    // Clear putaway scan input
-    const input = document.getElementById('mob-put-bin-scan-input');
-    if (input) input.value = '';
+    // Clear putaway scan inputs
+    const huInput = document.getElementById('mob-put-hu-scan-input');
+    if (huInput) huInput.value = '';
+    const binInput = document.getElementById('mob-put-bin-scan-input');
+    if (binInput) binInput.value = '';
 
     this.playBeep('success');
     this.showToast(`Putaway Completed! Material stored in ${scannedBin} ➔ Moving to Stock Enquiry`, 'success', '✅');

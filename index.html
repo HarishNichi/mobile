@@ -376,10 +376,18 @@
         </div>
 
         <div style="margin-bottom:10px;">
+          <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan HU / LPN Label Barcode</label>
+          <div style="display:flex; gap:6px; margin-top:3px;">
+            <input type="text" id="mob-put-hu-scan-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan HU barcode...">
+            <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="mob.quickScanPutawayHU()">📷 Scan</button>
+          </div>
+        </div>
+
+        <div style="margin-bottom:10px;">
           <label style="font-size:10px; color:#475569; font-weight:800; text-transform:uppercase;">Scan Destination Bin Barcode</label>
           <div style="display:flex; gap:6px; margin-top:3px;">
             <input type="text" id="mob-put-bin-scan-input" class="top-select" style="flex:1; padding:8px; font-size:12px; font-family:'JetBrains Mono',monospace;" placeholder="Scan Bin barcode...">
-            <button class="btn-mob-action" style="padding:4px 10px; font-size:11px;" onclick="mob.quickFillCorrectPutawayBin()">Auto Bin</button>
+            <button class="btn-mob-action" style="padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="mob.quickFillCorrectPutawayBin()">📷 Scan</button>
           </div>
         </div>
 
